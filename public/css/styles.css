@@ -1,0 +1,11 @@
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; font-family: system-ui, Arial, sans-serif; }
+header { display:flex; align-items:center; justify-content:space-between; padding:10px 16px; background:#1f2937; color:#fff; }
+header h1 { font-size:16px; margin:0; }
+header .actions button { margin-left:8px; padding:6px 10px; }
+main { position: absolute; top: 52px; bottom: 0; left: 0; right: 0; display:flex; }
+#blocklyArea { position: relative; flex: 2; }
+#blocklyDiv { position: absolute; }
+#code { flex: 1; margin: 0; padding: 12px; border-left: 1px solid #e5e7eb; background:#0b1020; color:#d1d5db; overflow:auto; }
+
+

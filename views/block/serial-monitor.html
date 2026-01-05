@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serial Monitor - Xploria</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0f0f23;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Custom scrollbar */
+        #serial_output::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        #serial_output::-webkit-scrollbar-track {
+            background: rgba(55, 65, 81, 0.3);
+            border-radius: 3px;
+        }
+        
+        #serial_output::-webkit-scrollbar-thumb {
+            background: rgba(75, 85, 99, 0.6);
+            border-radius: 3px;
+        }
+        
+        #serial_output::-webkit-scrollbar-thumb:hover {
+            background: rgba(75, 85, 99, 0.8);
+        }
+        
+        .serial-line {
+            margin: 0;
+            padding: 2px 0;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        
+        .serial-line:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="h-screen flex flex-col">
+        <!-- Header -->
+        <div class="bg-gray-800 border-b border-gray-700 p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <i class="material-icons text-blue-400 text-2xl">usb</i>
+                <h1 class="text-xl font-semibold">Serial Monitor</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <label class="text-gray-300 text-sm">Baud Rate:</label>
+                    <select id="serial_baud" class="bg-gray-700 border border-gray-600 text-white rounded px-3 py-1 text-sm focus:border-blue-500 focus:outline-none">
+                        <option value="300">300</option>
+                        <option value="1200">1200</option>
+                        <option value="2400">2400</option>
+                        <option value="4800">4800</option>
+                        <option value="9600">9600</option>
+                        <option value="19200">19200</option>
+                        <option value="38400">38400</option>
+                        <option value="57600">57600</option>
+                        <option value="115200" selected>115200</option>
+                        <option value="230400">230400</option>
+                        <option value="460800">460800</option>
+                        <option value="921600">921600</option>
+                        <option value="1000000">1000000</option>
+                        <option value="2000000">2000000</option>
+                        <option value="custom">Custom...</option>
+                    </select>
+                    <input 
+                        id="custom_baud" 
+                        type="number" 
+                        placeholder="Custom baud" 
+                        min="300" 
+                        max="2000000" 
+                        class="bg-gray-700 border border-gray-600 text-white rounded px-3 py-1 text-sm focus:border-blue-500 focus:outline-none w-24 hidden"
+                        style="display: none;"
+                    />
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-red-500" id="status_dot"></div>
+                    <span id="serial_status" class="text-gray-300 text-sm">Disconnected</span>
+                    <span id="current_baud" class="text-gray-400 text-xs">(115200 baud)</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <label class="flex items-center gap-2 text-sm">
+                        <input type="checkbox" id="auto_scroll" checked class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500">
+                        <span class="text-gray-300">Auto Scroll</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-sm">
+                        <input type="checkbox" id="show_timestamp" class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500">
+                        <span class="text-gray-300">Timestamp</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-sm">
+                        <input type="checkbox" id="line_mode" checked class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500">
+                        <span class="text-gray-300">Line Mode</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Output Section -->
+        <div class="flex-1 flex flex-col p-4 min-h-0">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-lg font-medium">Log</h2>
+                <div class="flex gap-2">
+                    <button onclick="serialClear()" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm flex items-center gap-1 transition-colors">
+                        <i class="material-icons text-sm">clear</i>
+                        Clear
+                    </button>
+
+                </div>
+            </div>
+            <div class="flex-1 bg-black rounded-lg border border-gray-700 overflow-hidden">
+                <div id="serial_output" class="h-full p-4 text-green-400 font-mono text-sm overflow-y-auto leading-relaxed"></div>
+            </div>
+        </div>
+
+        <!-- Input Section -->
+        <div class="bg-gray-800 border-t border-gray-700 p-4">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-lg font-medium">Send to Serial</h3>
+            </div>
+            <div class="flex items-center gap-3 flex-col sm:flex-row">
+                <input 
+                    id="serial_input" 
+                    type="text" 
+                    placeholder="Type command and press Enter to send..." 
+                    autocomplete="off"
+                    class="flex-1 w-full bg-gray-700 border border-gray-500 text-white rounded-lg px-4 py-3 focus:border-blue-500 focus:outline-none placeholder-gray-400 font-mono text-sm transition-colors"
+                />
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <button 
+                        onclick="serialSend()" 
+                        title="Send command to serial"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 transition-colors font-medium flex-1 sm:flex-none"
+                    >
+                        <i class="material-icons text-sm">send</i>
+                        <span class="hidden sm:inline">Send</span>
+                    </button>
+                    <button 
+                        onclick="serialClear()" 
+                        title="Clear output"
+                        class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 transition-colors font-medium flex-1 sm:flex-none"
+                    >
+                        <i class="material-icons text-sm">clear</i>
+                        <span class="hidden sm:inline">Clear</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-gray-800 border-t border-gray-700 p-3 flex items-center justify-between">
+            <div class="text-gray-400 text-sm">
+                <span id="serial_info">Ready to connect</span>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="serialConnect()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors text-sm">
+                    <i class="material-icons text-sm">link</i>
+                    Connect
+                </button>
+                <button onclick="serialDisconnect()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors text-sm">
+                    <i class="material-icons text-sm">link_off</i>
+                    Disconnect
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Serial Monitor JavaScript
+        var __serial = { 
+            port: null, 
+            reader: null, 
+            writer: null, 
+            textDecoder: null, 
+            textEncoder: null, 
+            isReading: false,
+            buffer: '', // Buffer for incomplete messages
+            bufferTimeout: null // Timeout for flushing buffer
+        };
+        
+        // Valid baud rates for validation - expanded list
+        var validBaudRates = [300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600, 1000000, 2000000];
+        
+        function validateBaudRate(baud) {
+            var baudInt = parseInt(baud, 10);
+            // Allow any reasonable baud rate between 300 and 2000000
+            return baudInt >= 300 && baudInt <= 2000000 && !isNaN(baudInt);
+        }
+        
+        function getValidBaudRate(baud) {
+            var baudInt = parseInt(baud, 10);
+            if (isNaN(baudInt)) return 115200;
+            
+            // Clamp to reasonable range
+            if (baudInt < 300) return 300;
+            if (baudInt > 2000000) return 2000000;
+            
+            return baudInt;
+        }
+
+        function appendSerial(text) {
+            var out = document.getElementById('serial_output');
+            if (!out) return;
+            
+            // Get current timestamp if enabled
+            var timestamp = '';
+            var showTimestamp = document.getElementById('show_timestamp');
+            if (showTimestamp && showTimestamp.checked) {
+                var now = new Date();
+                timestamp = '[' + now.toLocaleTimeString() + '] ';
+            }
+            
+            // Create new line element
+            var line = document.createElement('div');
+            line.className = 'serial-line';
+            line.textContent = timestamp + text;
+            
+            out.appendChild(line);
+            
+            // Auto scroll if enabled
+            var autoScroll = document.getElementById('auto_scroll');
+            if (!autoScroll || autoScroll.checked) {
+                out.scrollTop = out.scrollHeight;
+            }
+            
+            // Limit number of lines to prevent memory issues
+            var lines = out.children;
+            if (lines.length > 1000) {
+                out.removeChild(lines[0]);
+            }
+        }
+        
+        function processSerialData(data) {
+            var lineModeEl = document.getElementById('line_mode');
+            var isLineMode = !lineModeEl || lineModeEl.checked;
+            
+            if (isLineMode) {
+                // Line mode: buffer data and display complete lines
+                __serial.buffer += data;
+                
+                // Clear any existing timeout
+                if (__serial.bufferTimeout) {
+                    clearTimeout(__serial.bufferTimeout);
+                }
+                
+                // Process complete lines (ending with \n or \r\n)
+                var lines = __serial.buffer.split(/\r?\n/);
+                
+                // Keep the last part in buffer (might be incomplete)
+                __serial.buffer = lines.pop() || '';
+                
+                // Display complete lines
+                for (var i = 0; i < lines.length; i++) {
+                    if (lines[i].trim() !== '') { // Only display non-empty lines
+                        appendSerial(lines[i]);
+                    }
+                }
+                
+                // Set timeout to flush remaining buffer after 100ms of inactivity
+                __serial.bufferTimeout = setTimeout(function() {
+                    if (__serial.buffer.trim() !== '') {
+                        appendSerial(__serial.buffer);
+                        __serial.buffer = '';
+                    }
+                }, 100);
+            } else {
+                // Character mode: display data immediately (original behavior)
+                appendSerial(data);
+            }
+        }
+
+        function setSerialStatus(text) {
+            var el = document.getElementById('serial_status');
+            var dot = document.getElementById('status_dot');
+            var info = document.getElementById('serial_info');
+            var currentBaudEl = document.getElementById('current_baud');
+            
+            if (el) el.textContent = text;
+            
+            if (dot) {
+                dot.className = 'w-2 h-2 rounded-full';
+                if (text.includes('Connected')) {
+                    dot.classList.add('bg-green-500');
+                    if (info) info.textContent = 'Serial communication active';
+                    // Update baud rate display when connected
+                    if (currentBaudEl && text.includes('@')) {
+                        var baudMatch = text.match(/@ (\d+) baud/);
+                        if (baudMatch) {
+                            currentBaudEl.textContent = '(' + baudMatch[1] + ' baud)';
+                        }
+                    }
+                } else if (text.includes('Connecting')) {
+                    dot.classList.add('bg-yellow-500');
+                    if (info) info.textContent = 'Establishing connection...';
+                } else {
+                    dot.classList.add('bg-red-500');
+                    if (info) info.textContent = 'Ready to connect';
+                }
+            }
+        }
+
+        function initSerialMonitor() {
+            setSerialStatus('Disconnected');
+            
+            // Initialize baud rate display
+            var baudSelect = document.getElementById('serial_baud');
+            var currentBaudEl = document.getElementById('current_baud');
+            if (baudSelect && currentBaudEl) {
+                currentBaudEl.textContent = '(' + baudSelect.value + ' baud)';
+            }
+            
+            // Add Enter key listener for input
+            var input = document.getElementById('serial_input');
+            if (input) {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        serialSend();
+                        e.preventDefault();
+                    }
+                });
+            }
+            
+            // Add event listeners for toggle options
+            var autoScrollToggle = document.getElementById('auto_scroll');
+            var timestampToggle = document.getElementById('show_timestamp');
+            var lineModeToggle = document.getElementById('line_mode');
+            
+            if (autoScrollToggle) {
+                autoScrollToggle.addEventListener('change', function() {
+                    console.log('Auto scroll:', this.checked ? 'enabled' : 'disabled');
+                });
+            }
+            
+            if (timestampToggle) {
+                timestampToggle.addEventListener('change', function() {
+                    console.log('Timestamp:', this.checked ? 'enabled' : 'disabled');
+                });
+            }
+            
+            if (lineModeToggle) {
+                lineModeToggle.addEventListener('change', function() {
+                    console.log('Line mode:', this.checked ? 'enabled' : 'disabled');
+                    // Clear buffer when switching modes
+                    __serial.buffer = '';
+                    if (__serial.bufferTimeout) {
+                        clearTimeout(__serial.bufferTimeout);
+                        __serial.bufferTimeout = null;
+                    }
+                });
+            }
+            
+            // Add event listener for baud rate changes
+            var baudSelect = document.getElementById('serial_baud');
+            var customBaudInput = document.getElementById('custom_baud');
+            
+            if (baudSelect) {
+                baudSelect.addEventListener('change', function() {
+                    if (this.value === 'custom') {
+                        // Show custom input
+                        if (customBaudInput) {
+                            customBaudInput.style.display = 'block';
+                            customBaudInput.focus();
+                        }
+                        return;
+                    } else {
+                        // Hide custom input
+                        if (customBaudInput) {
+                            customBaudInput.style.display = 'none';
+                        }
+                    }
+                    
+                    var newBaud = parseInt(this.value, 10);
+                    handleBaudRateChange(newBaud);
+                });
+            }
+            
+            // Handle custom baud rate input
+            if (customBaudInput) {
+                customBaudInput.addEventListener('input', function() {
+                    var customBaud = parseInt(this.value, 10);
+                    if (!isNaN(customBaud) && customBaud >= 300 && customBaud <= 2000000) {
+                        handleBaudRateChange(customBaud);
+                    }
+                });
+                
+                customBaudInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        var customBaud = parseInt(this.value, 10);
+                        if (!isNaN(customBaud) && customBaud >= 300 && customBaud <= 2000000) {
+                            handleBaudRateChange(customBaud);
+                        } else {
+                            appendSerial('Invalid custom baud rate. Must be between 300 and 2000000.');
+                        }
+                    }
+                });
+            }
+            
+            function handleBaudRateChange(newBaud) {
+                // Get valid baud rate (clamp to reasonable range)
+                var validBaud = getValidBaudRate(newBaud);
+                
+                // Update the select value if it was clamped
+                if (validBaud !== newBaud) {
+                    if (baudSelect) baudSelect.value = validBaud.toString();
+                    if (customBaudInput) customBaudInput.value = validBaud;
+                    appendSerial('Baud rate adjusted to ' + validBaud + ' (clamped from ' + newBaud + ')');
+                }
+                
+                // Update visual indicator
+                var currentBaudEl = document.getElementById('current_baud');
+                if (currentBaudEl) {
+                    currentBaudEl.textContent = '(' + validBaud + ' baud)';
+                }
+                
+                if (__serial.port && __serial.port.readable) {
+                    // If already connected, reconnect with new baud rate
+                    appendSerial('Baud rate changed to ' + validBaud + '. Reconnecting...');
+                    setSerialStatus('Reconnecting...');
+                    
+                    serialDisconnect().then(function() {
+                        setTimeout(function() {
+                            serialConnect();
+                        }, 1000); // Increased delay for more reliable reconnection
+                    }).catch(function(err) {
+                        appendSerial('Error during reconnection: ' + err);
+                        setSerialStatus('Disconnected');
+                    });
+                } else {
+                    appendSerial('Baud rate set to ' + validBaud + ' (will apply on next connection)');
+                }
+            }
+        }
+
+        function serialClear() {
+            var out = document.getElementById('serial_output');
+            if (out) {
+                out.innerHTML = '';
+                // Clear buffer as well
+                __serial.buffer = '';
+                if (__serial.bufferTimeout) {
+                    clearTimeout(__serial.bufferTimeout);
+                    __serial.bufferTimeout = null;
+                }
+                appendSerial('Serial output cleared.');
+            }
+        }
+
+
+
+        async function serialConnect() {
+            try {
+                if (!('serial' in navigator)) { 
+                    appendSerial('Web Serial is not supported in this browser.'); 
+                    return; 
+                }
+                
+                setSerialStatus('Connecting...');
+                appendSerial('Requesting port access...');
+                
+                __serial.port = await navigator.serial.requestPort();
+                var baudEl = document.getElementById('serial_baud');
+                var customBaudEl = document.getElementById('custom_baud');
+                
+                var requestedBaud = 115200; // default
+                
+                // Check if custom baud rate is being used
+                if (baudEl && baudEl.value === 'custom' && customBaudEl && customBaudEl.value) {
+                    requestedBaud = parseInt(customBaudEl.value, 10);
+                } else if (baudEl) {
+                    requestedBaud = parseInt(baudEl.value || '115200', 10);
+                }
+                
+                // Get valid baud rate (clamp to reasonable range)
+                var baud = getValidBaudRate(requestedBaud);
+                
+                // Update the select if baud rate was adjusted
+                if (baud !== requestedBaud) {
+                    appendSerial('Baud rate adjusted from ' + requestedBaud + ' to ' + baud);
+                    if (baudEl) baudEl.value = baud.toString();
+                }
+                
+                appendSerial('Opening port at ' + baud + ' baud...');
+                
+                // Try to open the port with the specified baud rate
+                try {
+                    await __serial.port.open({ baudRate: baud });
+                } catch (openError) {
+                    // If opening fails, try with a fallback baud rate
+                    appendSerial('Failed to open at ' + baud + ' baud, trying 115200...');
+                    baud = 115200;
+                    if (baudEl) baudEl.value = '115200';
+                    await __serial.port.open({ baudRate: baud });
+                }
+                
+                __serial.textDecoder = new TextDecoderStream();
+                __serial.textEncoder = new TextEncoderStream();
+                const readableStreamClosed = __serial.port.readable.pipeTo(__serial.textDecoder.writable);
+                __serial.reader = __serial.textDecoder.readable.getReader();
+                const writableStreamClosed = __serial.textEncoder.readable.pipeTo(__serial.port.writable);
+                __serial.writer = __serial.textEncoder.writable.getWriter();
+                
+                setSerialStatus('Connected @ ' + baud + ' baud');
+                appendSerial('✓ Connected to serial port at ' + baud + ' baud');
+                appendSerial('Ready to receive data...');
+                appendSerial('[Connected]');
+                
+                __serial.isReading = true;
+                ;(async function readLoop(){
+                    try {
+                        while (__serial.reader && __serial.isReading) {
+                            const { value, done } = await __serial.reader.read();
+                            if (done) break;
+                            processSerialData(value);
+                        }
+                    } catch(err) {
+                        if (__serial.isReading) {
+                            appendSerial('Read error: ' + err);
+                        }
+                    }
+                })();
+            } catch(err) {
+                appendSerial('✗ Connect error: ' + err);
+                setSerialStatus('Disconnected');
+                // Clean up on error
+                if (__serial.port) {
+                    try { await __serial.port.close(); } catch(e) {}
+                    __serial.port = null;
+                }
+            }
+        }
+
+        async function serialDisconnect() {
+            try {
+                __serial.isReading = false;
+                
+                // Clear buffer and timeout
+                if (__serial.bufferTimeout) {
+                    clearTimeout(__serial.bufferTimeout);
+                    __serial.bufferTimeout = null;
+                }
+                
+                // Flush any remaining buffer data
+                if (__serial.buffer.trim() !== '') {
+                    appendSerial(__serial.buffer);
+                    __serial.buffer = '';
+                }
+                
+                // Clean up reader
+                if (__serial.reader) { 
+                    try { 
+                        await __serial.reader.cancel(); 
+                    } catch(e) { 
+                        console.log('Reader cancel error:', e); 
+                    } 
+                    try { 
+                        __serial.reader.releaseLock(); 
+                    } catch(e) { 
+                        console.log('Reader release error:', e); 
+                    } 
+                    __serial.reader = null; 
+                }
+                
+                // Clean up writer
+                if (__serial.writer) { 
+                    try { 
+                        await __serial.writer.close(); 
+                    } catch(e) { 
+                        console.log('Writer close error:', e); 
+                    } 
+                    try { 
+                        __serial.writer.releaseLock(); 
+                    } catch(e) { 
+                        console.log('Writer release error:', e); 
+                    } 
+                    __serial.writer = null; 
+                }
+                
+                // Clean up port
+                if (__serial.port) { 
+                    try { 
+                        await __serial.port.close(); 
+                    } catch(e) { 
+                        console.log('Port close error:', e); 
+                    } 
+                    __serial.port = null;
+                }
+                
+                setSerialStatus('Disconnected');
+                appendSerial('✓ Disconnected from serial port');
+                appendSerial('[Disconnected]');
+                return Promise.resolve();
+            } catch(err) {
+                appendSerial('✗ Disconnect error: ' + err);
+                // Force cleanup even if there's an error
+                __serial.isReading = false;
+                __serial.reader = null;
+                __serial.writer = null;
+                __serial.port = null;
+                __serial.buffer = '';
+                if (__serial.bufferTimeout) {
+                    clearTimeout(__serial.bufferTimeout);
+                    __serial.bufferTimeout = null;
+                }
+                setSerialStatus('Disconnected');
+                return Promise.reject(err);
+            }
+        }
+
+        async function serialSend() {
+            try {
+                var input = document.getElementById('serial_input');
+                if (!input) return;
+                var text = input.value || '';
+                if (!text) return;
+                
+                if (__serial.writer) {
+                    await __serial.writer.write(text + '\n');
+                    appendSerial('> ' + text);
+                    input.value = '';
+                } else {
+                    appendSerial('[Not connected]');
+                }
+            } catch(err) {
+                appendSerial('Send error: ' + err);
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initSerialMonitor();
+        });
+
+        // Handle window close
+        window.addEventListener('beforeunload', function() {
+            if (__serial.port) {
+                serialDisconnect();
+            }
+        });
+    </script>
+</body>
+</html>

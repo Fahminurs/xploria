@@ -1,0 +1,2772 @@
+<html>
+
+<head>
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="/css/materialize.min.css" media="screen,projection">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Star button styling removed */
+        
+        
+        /* Panel actions layout */
+        .panel-actions {
+            display: flex !important;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: nowrap;
+        }
+        
+        
+        /* History item star styling */
+        .history-item {
+            position: relative !important;
+            padding: 12px !important;
+            margin-bottom: 8px !important;
+            background: rgba(255, 255, 255, 0.05) !important;
+            border-radius: 8px !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .history-item:hover {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+        }
+        
+        .history-item-star {
+            position: absolute !important;
+            top: 8px !important;
+            right: 8px !important;
+            z-index: 10 !important;
+            padding: 4px !important;
+            border-radius: 50% !important;
+            background: rgba(0, 0, 0, 0.3) !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .history-item-star:hover {
+            background: rgba(0, 0, 0, 0.5) !important;
+            transform: scale(1.1) !important;
+        }
+        
+        .star-icon-item {
+            font-size: 18px !important;
+            color: #9e9e9e !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .star-icon-item.starred {
+            color: #ffd700 !important;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.5) !important;
+        }
+        
+        .star-icon-item.unstarred {
+            color: #9e9e9e !important;
+        }
+        
+        .history-item-content {
+            padding-right: 40px !important;
+        }
+        
+        .history-item-title {
+            font-weight: 600 !important;
+            color: #ffffff !important;
+            margin-bottom: 4px !important;
+            font-size: 14px !important;
+        }
+        
+        .history-item-time {
+            color: #9ca3af !important;
+            font-size: 12px !important;
+            margin-bottom: 6px !important;
+        }
+        
+        .history-item-preview {
+            color: #d1d5db !important;
+            font-size: 11px !important;
+            line-height: 1.4 !important;
+            max-height: 40px !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+        
+        .history-item-actions {
+            margin-top: 8px !important;
+            display: flex !important;
+            gap: 6px !important;
+        }
+        
+        .action-btn-small {
+            padding: 4px 8px !important;
+            font-size: 11px !important;
+            border-radius: 4px !important;
+            background: rgba(59, 130, 246, 0.1) !important;
+            border: 1px solid rgba(59, 130, 246, 0.3) !important;
+            color: #60a5fa !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+        }
+        
+        .action-btn-small:hover {
+            background: rgba(59, 130, 246, 0.2) !important;
+            border-color: rgba(59, 130, 246, 0.5) !important;
+        }
+        
+        
+        /* Search functionality styling */
+        .sidebar-search {
+            position: relative !important;
+            padding: 8px 16px !important;
+        }
+        
+        .sidebar-search .input-field {
+            position: relative !important;
+            margin: 0 !important;
+            width: 100% !important;
+        }
+        
+        .sidebar-search input {
+            transition: all 0.3s ease !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            background: rgba(255, 255, 255, 0.05) !important;
+            color: #ffffff !important;
+            border-radius: 8px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            padding-left: 40px !important;
+            padding-right: 12px !important;
+            margin: 0 !important;
+        }
+        
+        .sidebar-search input:focus {
+            border-color: #3b82f6 !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+            transform: scale(1.02) !important;
+        }
+        
+        .sidebar-search input::placeholder {
+            color: #9ca3af !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .sidebar-search input:focus::placeholder {
+            color: #6b7280 !important;
+            transform: translateY(-2px) !important;
+        }
+        
+        /* Search icon animation */
+        .sidebar-search .material-icons {
+            transition: all 0.3s ease !important;
+        }
+        
+        .sidebar-search input:focus + .material-icons {
+            color: #3b82f6 !important;
+            transform: scale(1.1) !important;
+        }
+        
+        /* No results message */
+        .no-results-message {
+            text-align: center !important;
+            padding: 40px 20px !important;
+            color: #9ca3af !important;
+            font-size: 14px !important;
+            opacity: 0 !important;
+            transform: translateY(20px) !important;
+            transition: all 0.5s ease !important;
+        }
+        
+        .no-results-message.show {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+        
+        .no-results-message .material-icons {
+            font-size: 48px !important;
+            color: #6b7280 !important;
+            margin-bottom: 12px !important;
+            display: block !important;
+            animation: bounce 2s infinite !important;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        /* History item search animation */
+        .history-item {
+            transition: all 0.3s ease !important;
+            transform: translateX(0) !important;
+            opacity: 1 !important;
+        }
+        
+        .history-item.searching {
+            transform: translateX(-10px) !important;
+            opacity: 0.7 !important;
+        }
+        
+        .history-item.search-match {
+            transform: translateX(0) !important;
+            opacity: 1 !important;
+            background: rgba(59, 130, 246, 0.1) !important;
+            border-color: rgba(59, 130, 246, 0.3) !important;
+        }
+        
+        .history-item.search-no-match {
+            transform: translateX(10px) !important;
+            opacity: 0.3 !important;
+            filter: blur(1px) !important;
+        }
+ 
+        
+        @keyframes spin {
+            from { transform: translateY(-50%) rotate(0deg); }
+            to { transform: translateY(-50%) rotate(360deg); }
+        }
+        
+        /* SweetAlert2 Dark Theme Customization */
+        .swal2-popup {
+            background: #1f2937 !important;
+            border-radius: 20px !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+        }
+        
+        .swal2-title {
+            color: #ffffff !important;
+            font-weight: 600 !important;
+            font-size: 24px !important;
+        }
+        
+        .swal2-html-container {
+            color: #d1d5db !important;
+            font-size: 16px !important;
+        }
+        
+        .swal2-actions {
+            gap: 12px !important;
+        }
+        
+        .swal2-confirm {
+            background: #ef4444 !important;
+            border: none !important;
+            border-radius: 25px !important;
+            padding: 12px 24px !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3) !important;
+        }
+        
+        .swal2-confirm:hover {
+            background: #dc2626 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4) !important;
+        }
+        
+        .swal2-cancel {
+            background: #374151 !important;
+            border: 1px solid #4b5563 !important;
+            border-radius: 25px !important;
+            padding: 12px 24px !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            color: #ffffff !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .swal2-cancel:hover {
+            background: #4b5563 !important;
+            border-color: #6b7280 !important;
+            transform: translateY(-2px) !important;
+        }
+        
+        .swal2-icon {
+            border-radius: 50% !important;
+        }
+        
+        .swal2-icon.swal2-warning {
+            border-color: #f59e0b !important;
+            color: #f59e0b !important;
+        }
+        
+        .swal2-icon.swal2-warning .swal2-icon-content {
+            color: #f59e0b !important;
+        }
+        
+        /* Logout button styling */
+        .logout-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+            border: none !important;
+            border-radius: 25px !important;
+            padding: 10px 20px !important;
+            color: white !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3) !important;
+        }
+        
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4) !important;
+        }
+        
+        .logout-btn:active {
+            transform: translateY(0) !important;
+        }
+        
+        /* Workspace Selection Message Styles */
+        .workspace-selection-container {
+            position: fixed;
+            top: 60px; /* Start below navbar */
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 60px); /* Full height minus navbar height */
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100; /* Lower than navbar */
+        }
+        
+        .workspace-selection-content {
+            text-align: center;
+            color: #ffffff;
+            max-width: 500px;
+            padding: 40px;
+        }
+        
+        .workspace-selection-icon {
+            font-size: 80px !important;
+            color: #3b82f6;
+            margin-bottom: 24px;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .workspace-selection-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0 0 16px 0;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .workspace-selection-subtitle {
+            font-size: 18px;
+            color: #94a3b8;
+            margin: 0;
+            line-height: 1.6;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Hide workspace selection when panels are shown */
+        .workspace-selection-container.hidden {
+            display: none !important;
+        }
+        
+        /* Ensure navbar stays on top */
+        .main-navbar {
+            z-index: 1000 !important;
+            position: relative;
+        }
+        
+        /* Autosave status positioning - using Tailwind classes instead */
+        .autosave-indicator {
+            /* Tailwind equivalent: absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[1002] px-4 py-2 rounded-lg text-sm font-medium */
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            z-index: 1002 !important;
+            margin-left: 0 !important;
+            padding: 8px 16px !important;
+            border-radius: 8px !important;
+            font-size: 13px !important;
+            font-weight: 500 !important;
+            color: #ffffff !important;
+            background: linear-gradient(135deg, #4caf50, #45a049) !important;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+            border: 1px solid rgba(76, 175, 80, 0.5) !important;
+            transition: all 0.3s ease !important;
+            animation: fadeIn 0.3s ease-out !important;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+        
+    </style>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!--Import jQuery before materialize.js-->
+        <!-- <script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
+    <script src="https://unpkg.com/blockly/blocks_compressed.js"></script>
+    <script src="https://unpkg.com/blockly/javascript_compressed.js"></script> -->
+     <script type="text/javascript" src="/header.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+   
+  
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h4>Code History</h4>
+            <button id="sidebar-toggle" class="sidebar-toggle">
+                <i class="material-icons">close</i>
+            </button>
+        </div>
+        <div class="sidebar-search" style="padding:8px 16px;">
+            <div class="input-field" style="margin:0; position:relative;">
+                <i class="material-icons" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#9ca3af; font-size:20px;">search</i>
+                <input id="sidebar-search-input" class="browser-default" type="text" placeholder="Search..." style="height:36px; line-height:36px; padding-left:40px; padding-right:12px; width:100%; box-sizing:border-box;">
+            </div>
+        </div>
+        
+        <div class="sidebar-tabs">
+            <button class="tab-button active" data-tab="history">
+                <i class="material-icons">history</i>
+                History
+            </button>
+            <button class="tab-button" data-tab="starred">
+                <i class="material-icons">star</i>
+                Starred
+            </button>
+        </div>
+        
+        <div class="sidebar-add" style="padding:8px 12px;">
+            <button class="action-btn-small" onclick="createNewProject()" style="display:flex !important; align-items:center; justify-content:center; width:100%; height:44px; line-height:44px;">
+                <i class="material-icons" style="margin-right:6px;">add</i>
+                Add New Project
+            </button>
+        </div>
+        
+        
+        <div class="sidebar-content">
+            <div id="history-tab" class="tab-content active">
+                <div class="history-list" id="history-list">
+                    <!-- History items will be populated here -->
+                </div>
+                <div class="no-results-message" id="no-results-message" style="display: none;">
+                    <i class="material-icons">search_off</i>
+                    Data tidak ditemukan
+                </div>
+            </div>
+            
+            <div id="starred-tab" class="tab-content">
+                <div class="starred-list" id="starred-list">
+                    <!-- Starred items will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <!-- Main Navbar -->
+<!-- Main Navbar -->
+<nav class="main-navbar">
+    <div class="nav-wrapper">
+        <div class="nav-left">
+            <button id="sidebar-toggle-btn" class="sidebar-toggle-btn">
+                <i class="material-icons">menu</i>
+            </button>
+
+            <!-- Custom Device Detection Dropdown -->
+            <div class="device-dropdown-container">
+                <div class="device-dropdown" id="deviceDropdown">
+                    <div class="device-dropdown-trigger">
+                        <div class="device-status-indicator"></div>
+                        <span class="device-selected-text">Device Detected</span>
+                        <i class="material-icons dropdown-arrow">keyboard_arrow_down</i>
+                    </div>
+                    <div class="device-dropdown-menu" id="deviceDropdownMenu">
+                        <!-- Dynamic COM ports will be populated here -->
+                    </div>
+                </div>
+                <!-- Reset Button -->
+                <button id="device-reset-btn" class="device-reset-btn tooltipped" data-tooltip="Refresh Device Detection">
+                    <i class="material-icons">refresh</i>
+                </button>
+            </div>
+            <!-- Serial Monitor Button -->
+            <button onclick="openSerialMonitor()" class="action-btn tooltipped" data-tooltip="Serial Monitor" id="btn-serial-monitor" style="margin-left:10px;">
+                <i class="material-icons">usb</i>
+            </button>
+        </div>
+
+        <div class="nav-center">
+            <h1 class="brand-logo">Xploria</h1>
+        </div>
+
+        <div class="nav-right">
+            <!-- Upload Button with Icon -->
+            <button class="upload-btn">
+                <i class="material-icons">upload</i>
+                Upload
+            </button>
+            <!-- Profile Avatar Dropdown Trigger -->
+            <a class="dropdown-button" href="#" data-activates="profileDropdown" aria-label="Profile Menu" style="margin-left:12px; display:inline-flex; align-items:center;">
+                <div class="avatar-circle" id="profileAvatar" style="overflow:hidden;">
+                    <i class="material-icons" id="profileIcon">person</i>
+                </div>
+            </a>
+        </div>
+        
+        <!-- Autosave status indicator with Tailwind CSS -->
+        <div id="autosave-status" class="autosave-indicator absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[1002] px-4 py-2 rounded-lg text-sm font-medium text-white bg-gradient-to-r from-green-500 to-green-600 shadow-lg border border-green-400/50 transition-all duration-300 ease-in-out opacity-0 scale-95 pointer-events-none" style="display: none;">
+            <div class="flex items-center space-x-2">
+                <i class="material-icons text-base">check_circle</i>
+                <span class="font-medium">Auto-saved</span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal dark-modal">
+        <div class="modal-content">
+            <form action="#">
+                <p id="dialog-lang-title">Language Setting</p>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input class="with-gap" name="group1" type="radio" id="select-lang-en" value="en">
+                                <label for="select-lang-en" id="label-en">English</label>
+                            </td>
+                            <td>
+                                <input class="with-gap" name="group1" type="radio" id="select-lang-ja" value="ja">
+                                <label for="select-lang-ja" id="label-ja">日本語</label>
+                            </td>
+                            <td>
+                                <input class="with-gap" name="group1" type="radio" id="select-lang-ja_kids" value="ja_kids">
+                                <label for="select-lang-ja_kids" id="label-ja-kids">にほんご</label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p id="dialog-block-title">Option Blocks</p>
+                <p>
+                    </p><table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="filled-in" id="chbox_category_adafruit" value="category_adafruit">
+                                    <label for="chbox_category_adafruit">adafruit</label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" class="filled-in" id="chbox_category_grove" value="category_grove">
+                                    <label for="chbox_category_grove">grove</label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" class="filled-in" id="chbox_category_robot" value="category_robot">
+                                    <label for="chbox_category_robot">robot</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="filled-in" id="chbox_category_ethernet" value="category_ethernet">
+                                    <label for="chbox_category_ethernet">Ethernet</label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" class="filled-in" id="chbox_category_cloud_service" value="category_cloud_service">
+                                    <label for="chbox_category_cloud_service">category_cloud_service</label>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="filled-in" id="chbox_category_servo" value="category_servo">
+                                    <label for="chbox_category_servo">servo</label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" class="filled-in" id="chbox_category_ultrasonic" value="category_ultrasonic">
+                                    <label for="chbox_category_ultrasonic">ultrasonic</label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" class="filled-in" id="chbox_category_lcd" value="category_lcd">
+                                    <label for="chbox_category_lcd">lcd</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="filled-in" id="chbox_category_other_sensor" value="category_other_sensor">
+                                    <label for="chbox_category_other_sensor">other sensor</label>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat" onclick="change_lang()">OK</a>
+        </div>
+    </div>
+
+
+    <!-- modal_varialble Structure -->
+    <div id="modal_variable" class="modal dark-modal">
+        <div class="modal-content">
+            <div class="input-field">
+                <input id="dialog_var_name" type="text" class="validate" pattern="^[0-9A-Za-z]+$" required>
+                <label id="dialog_var_title" for="dialog_var_name">Rename Variable Name</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat" onclick="set_variable()">OK</a>
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">CANCEL</a>
+        </div>
+    </div>
+
+    <!-- modal_import Structure -->
+    <div id="modal_import" class="modal dark-modal">
+        <div class="modal-content">
+            <div class="input-field">
+                <textarea id="textarea_import" class="materialize-textarea"></textarea>
+                <label id="textarea_import_label" for="textarea_import">Import XML</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a id="dialog_import_ok" href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat" onclick="import_xml()">OK</a>
+            <a id="dialog_import_cancel" href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">CANCEL</a>
+        </div>
+    </div>
+
+    <!-- modal_import Structure -->
+    <div id="modal_export" class="modal dark-modal">
+        <div class="modal-content">
+            <div class="input-field">
+                <textarea id="textarea_export" class="materialize-textarea"></textarea>
+                <label id="textarea_export_label" for="textarea_export">Export XML</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a id="dialog_export_ok" href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">OK</a>
+        </div>
+    </div>
+
+    <!-- Dropdown Structure -->
+    <ul id="dropdown1" class="dropdown-content">
+        <li>
+            <a class="modal-trigger" href="#modal_import" id="button_import">Import</a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a class="modal-trigger" href="#!" id="button_export" onclick="export_xml()">Export</a>
+        </li>
+    </ul>
+
+    <!-- Profile Dropdown -->
+    <ul id="profileDropdown" class="dropdown-content">
+        <li><a href="#" id="profileName">Nama</a></li>
+        <li><a href="#" id="editProfile">Edit Profile</a></li>
+        <li><a href="#" id="logoutMenuItem">Logout</a></li>
+    </ul>
+
+    <script>
+        (function(){
+            // Safe bind after DOM is ready
+            document.addEventListener('DOMContentLoaded', function(){
+                var logout = document.getElementById('logoutMenuItem');
+                if (logout) {
+                    logout.addEventListener('click', function(e){
+                        e.preventDefault();
+                        confirmLogout();
+                    });
+                }
+                
+                var editProfile = document.getElementById('editProfile');
+                if (editProfile) {
+                    editProfile.addEventListener('click', function(e){
+                        e.preventDefault();
+                        window.location.href = '/edit-profile';
+                    });
+                }
+
+                // Redirect to login if not authenticated and load user/workspaces
+                (function initAuthAndData(){
+                    try {
+                        var raw = localStorage.getItem('user');
+                        if (!raw) { window.location.href = '/login'; return; }
+                        var user = JSON.parse(raw);
+                        if (!user || !user.email) { window.location.href = '/login'; return; }
+                        fetch('/api/me?email=' + encodeURIComponent(user.email))
+                          .then(function(r){ return r.json(); })
+                          .then(function(d){
+                              if (!d || !d.success) { window.location.href = '/login'; return; }
+                              var nameEl = document.getElementById('profileName');
+                              if (nameEl) nameEl.textContent = d.user.nama || d.user.email;
+                              var av = document.getElementById('profileAvatar');
+                              var ic = document.getElementById('profileIcon');
+                              if (av && d.user.picture) {
+                                  av.style.backgroundImage = 'url(' + d.user.picture + ')';
+                                  av.style.backgroundSize = 'cover';
+                                  av.style.backgroundPosition = 'center';
+                                  if (ic) ic.style.display = 'none';
+                              }
+                              // Cache current user id for autosave
+                              window.currentUserId = d.user.id_users;
+                              loadWorkspaces(d.user.id_users);
+                              // If URL is /block/:id, autoload that workspace
+                              try {
+                                  var m = (location.pathname||'').match(/\/block\/([^\/]+)/);
+                                  if (m && m[1]) {
+                                      loadHistoryItem(decodeURIComponent(m[1]));
+                                  } else {
+                                      // No workspace ID in URL, show workspace selection message
+                                      showWorkspaceSelection();
+                                  }
+                              } catch(_){ 
+                                  // Show workspace selection message on error
+                                  showWorkspaceSelection();
+                              }
+                              // Setup autosave listener once Blockly is ready (retry multiple times)
+                              setTimeout(setupAutosaveListener, 1000);
+                              (function retryAutosaveAttach(attempt){
+                                  if (attempt > 20) {
+                                      console.warn('[Autosave] Max retry attempts reached, giving up');
+                                      return;
+                                  }
+                                  setTimeout(function(){
+                                      setupAutosaveListener();
+                                      retryAutosaveAttach(attempt+1);
+                                  }, 1000);
+                              })(1);
+                              
+                              // Star button removed from panel
+                              
+                              // Restore from localStorage if no workspace is loaded
+                              setTimeout(function(){
+                                  try {
+                                      var storedXml = localStorage.getItem('blockly_workspace');
+                                      if (storedXml && window.Blockly && Blockly.mainWorkspace) {
+                                          var currentXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
+                                          // Only restore if current workspace is empty or different
+                                          if (!currentXml || currentXml.indexOf('<block') === -1 || currentXml !== storedXml) {
+                                              var xmlDom = Blockly.Xml.textToDom(storedXml);
+                                              Blockly.mainWorkspace.clear();
+                                              Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
+                                              console.log('[Blockly] Restored from localStorage');
+                                          }
+                                      }
+                                  } catch(e) {
+                                      console.warn('Failed to restore from localStorage:', e);
+                                  }
+                              }, 1000);
+                          });
+                    } catch(_) { window.location.href = '/login'; }
+                })();
+
+                function loadWorkspaces(userId){
+                    var q = document.getElementById('sidebar-search-input');
+                    var url = '/api/workspaces?userId=' + encodeURIComponent(userId) + (q && q.value ? ('&q=' + encodeURIComponent(q.value)) : '');
+                    fetch(url)
+                      .then(function(r){ return r.json(); })
+                      .then(function(d){
+                          if (!d || !d.success) return;
+                          var history = document.getElementById('history-list');
+                          var starred = document.getElementById('starred-list');
+                          if (history) history.innerHTML = '';
+                          if (starred) starred.innerHTML = '';
+                          var hasStar = 0;
+                          (d.workspaces||[]).forEach(function(ws){
+                              var title = ws.judul || 'Untitled';
+                              var createdAt = ws.created_at;
+                              var bloks = ws.bloks;
+                              var preview = '';
+                              try {
+                                  var str = typeof bloks === 'string' ? bloks : JSON.stringify(bloks);
+                                  preview = (str || '').toString().replace(/\s+/g, ' ').trim().slice(0, 160);
+                              } catch(_) { preview = ''; }
+
+                              var item = document.createElement('div');
+                              item.className = 'history-item';
+                              item.setAttribute('data-title', title);
+                              item.setAttribute('data-id', ws.id_workspace);
+                              item.setAttribute('data-starred', String(ws.is_starred ? 1 : 0));
+                              item.innerHTML =
+                                '<div class="history-item-star" onclick="starHistoryItem(\'' + ws.id_workspace + '\', ' + (ws.is_starred ? 'true' : 'false') + ')">' +
+                                  '<i class="material-icons star-icon-item ' + (ws.is_starred ? 'starred' : 'unstarred') + '">' + (ws.is_starred ? 'star' : 'star_border') + '</i>' +
+                                '</div>' +
+                                '<div class="history-item-content">' +
+                                '<div class="history-item-title">' + title + '</div>' +
+                                '<div class="history-item-time">' + formatRelativeTime(createdAt) + '</div>' +
+                                '<div class="history-item-preview">' + escapeHtml(preview) + '</div>' +
+                                '</div>' +
+                                '<div class="history-item-actions">' +
+                                  '<button class="action-btn-small" onclick="loadHistoryItem(\'' + ws.id_workspace + '\')">Load</button>' +
+                                  '<button class="action-btn-small" onclick="deleteHistoryItem(\'' + ws.id_workspace + '\')">Delete</button>' +
+                                '</div>';
+                              if (history) {
+                                  history.appendChild(item);
+                                  // Click on the whole item loads workspace (ignore clicks on action buttons)
+                                  item.addEventListener('click', function(ev){
+                                      if (ev.target && ev.target.closest('.history-item-actions')) return;
+                                      loadHistoryItem(ws.id_workspace);
+                                  });
+                              }
+                              if (ws.is_starred && starred) {
+                                  hasStar++;
+                                  var sitem = document.createElement('div');
+                                  sitem.className = 'history-item';
+                                  sitem.setAttribute('data-title', title);
+                                  sitem.setAttribute('data-id', ws.id_workspace);
+                                  sitem.setAttribute('data-starred', '1');
+                                  sitem.innerHTML = item.innerHTML;
+                                  starred.appendChild(sitem);
+                                  sitem.addEventListener('click', function(ev){
+                                      if (ev.target && ev.target.closest('.history-item-actions')) return;
+                                      loadHistoryItem(ws.id_workspace);
+                                  });
+                              }
+                          });
+                          var tabs = document.querySelectorAll('.tab-button');
+                          for (var i=0;i<tabs.length;i++){
+                              if (tabs[i].getAttribute('data-tab') === 'starred'){
+                                  tabs[i].style.display = hasStar ? '' : 'none';
+                              }
+                          }
+                      });
+                }
+
+                // Manual save function removed - using autosave instead
+                
+                // Star workspace functionality removed from panel
+                
+                
+                
+                
+                // Logout functionality with SweetAlert2
+                window.confirmLogout = function() {
+                    try {
+                        Swal.fire({
+                            title: 'Logout Confirmation',
+                            text: 'Are you sure you want to logout? All unsaved changes will be lost.',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Yes, Logout',
+                            cancelButtonText: 'Cancel',
+                            confirmButtonColor: '#ef4444',
+                            cancelButtonColor: '#374151',
+                            background: '#1f2937',
+                            customClass: {
+                                popup: 'swal2-popup',
+                                title: 'swal2-title',
+                                htmlContainer: 'swal2-html-container',
+                                confirmButton: 'swal2-confirm',
+                                cancelButton: 'swal2-cancel',
+                                icon: 'swal2-icon'
+                            },
+                            buttonsStyling: true,
+                            reverseButtons: true,
+                            focusCancel: true
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                performLogout();
+                              }
+                          });
+                    } catch(e) {
+                        console.warn('[Logout] Error showing confirmation dialog:', e);
+                        // Fallback to simple confirm
+                        if (confirm('Are you sure you want to logout?')) {
+                            performLogout();
+                        }
+                    }
+                };
+                
+                function performLogout() {
+                    try {
+                        console.log('[Logout] Starting logout process...');
+                        
+                        // Clear localStorage
+                        localStorage.removeItem('user');
+                        localStorage.removeItem('blockly_workspace');
+                        
+                        // Show loading
+                        Swal.fire({
+                            title: 'Logging out...',
+                            text: 'Please wait while we log you out.',
+                            icon: 'info',
+                            background: '#1f2937',
+                            customClass: {
+                                popup: 'swal2-popup',
+                                title: 'swal2-title',
+                                htmlContainer: 'swal2-html-container'
+                            },
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            showConfirmButton: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                        
+                        // Redirect to login page
+                        setTimeout(function() {
+                            window.location.href = '/login';
+                        }, 1500);
+                        
+                    } catch(e) {
+                        console.warn('[Logout] Error during logout:', e);
+                        // Force redirect even if there's an error
+                        window.location.href = '/login';
+                    }
+                }
+                
+
+                // Functions to show/hide workspace selection message and panels
+                window.showWorkspaceSelection = function() {
+                    var messageContainer = document.getElementById('workspace-selection-message');
+                    var leftPanel = document.getElementById('left-panel');
+                    var rightPanel = document.getElementById('right-panel');
+                    var resizableDivider = document.getElementById('resizableDivider');
+                    
+                    if (messageContainer) messageContainer.classList.remove('hidden');
+                    if (leftPanel) leftPanel.style.display = 'none';
+                    if (rightPanel) rightPanel.style.display = 'none';
+                    if (resizableDivider) resizableDivider.style.display = 'none';
+                };
+
+                window.hideWorkspaceSelection = function() {
+                    var messageContainer = document.getElementById('workspace-selection-message');
+                    var leftPanel = document.getElementById('left-panel');
+                    var rightPanel = document.getElementById('right-panel');
+                    var resizableDivider = document.getElementById('resizableDivider');
+                    
+                    if (messageContainer) messageContainer.classList.add('hidden');
+                    if (leftPanel) leftPanel.style.display = 'flex';
+                    if (rightPanel) rightPanel.style.display = 'flex';
+                    if (resizableDivider) resizableDivider.style.display = 'block';
+                    
+                    // Trigger any necessary layout updates
+                    if (window.Blockly && Blockly.mainWorkspace) {
+                        setTimeout(function() {
+                            Blockly.mainWorkspace.resize();
+                        }, 100);
+                    }
+                };
+
+                window.createNewProject = function(){
+                    try {
+                        if (window.Blockly && Blockly.mainWorkspace) {
+                            Blockly.mainWorkspace.clear();
+                        }
+                        var fn = document.getElementById('project-filename');
+                        if (fn) fn.value = 'My Project';
+                        window.currentWorkspaceId = null;
+                        try { history.replaceState(null, '', '/block'); } catch(_){ }
+                        
+                        // Reset star button for new project
+                        updateStarIcon(false);
+                        // Seed default setup/loop blocks and persist to localStorage
+                        var seedXml = '<xml xmlns="http://www.w3.org/1999/xhtml"><block type="initializes_setup" id="5" x="20" y="20"></block><block type="initializes_loop" id="6" x="20" y="140"></block></xml>';
+                        try {
+                            if (window.Blockly && Blockly.mainWorkspace) {
+                                var xmlDom = Blockly.Xml.textToDom(seedXml);
+                                Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
+                            }
+                            // Save to localStorage so it auto-restores
+                            saveToLocalStorage(seedXml);
+                            // Mark last-saved snapshot as the seeded XML to avoid saving until changed
+                            window.__lastSavedXml = String(seedXml);
+                            try {
+                                var _fn = document.getElementById('project-filename');
+                                window.__lastSavedTitle = (_fn && _fn.value) ? String(_fn.value) : 'My Project';
+                            } catch(_){ window.__lastSavedTitle = 'My Project'; }
+                        } catch(e){ console.warn('Failed to seed default blocks', e); }
+                        
+                        // Hide workspace selection message and show panels
+                        hideWorkspaceSelection();
+                        
+                        // Create workspace in database
+                        var userId = window.currentUserId;
+                        if (userId) {
+                            var payload = { userId: userId, judul: 'My Project', bloks: seedXml };
+                            fetch('/api/workspaces', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload)
+                            }).then(function(r){ 
+                                console.log('[CreateNewProject] POST response status:', r.status);
+                                return r.json(); 
+                            })
+                              .then(function(d){
+                                  console.log('[CreateNewProject] POST response data:', d);
+                                  if (d && d.success && d.id_workspace) {
+                                      window.currentWorkspaceId = d.id_workspace;
+                                      try { history.replaceState(null, '', '/block/' + encodeURIComponent(d.id_workspace)); } catch(_){ }
+                                      // Refresh lists once after create
+                                      loadWorkspaces(userId);
+                                      console.log('[CreateNewProject] Successfully created workspace:', d.id_workspace);
+                                  } else {
+                                      console.warn('[CreateNewProject] Failed to create workspace:', d);
+                                  }
+                              })
+                              .catch(function(err){
+                                  console.warn('CreateNewProject failed:', err);
+                              });
+                        }
+                        
+                        if (typeof renderContent === 'function') renderContent();
+                        // ensure autosave runs after seeding
+                        try { scheduleAutosave(); } catch(_){ }
+                        // Re-setup filename autosave listener after creating new project
+                        setTimeout(function(){
+                            setupFilenameAutosaveListener();
+                        }, 200);
+                    } catch(e) { console.warn('Failed to create new project', e); }
+                };
+
+                // ===== Autosave to server =====
+                var __autosaveTimer = null;
+                var __autosaveInFlight = false;
+                var __filenameTimer = null;
+                var __statusTimer = null;
+                var __periodicSaveTimer = null;
+                
+                function setupAutosaveListener(){
+                    
+                    try {
+                        if (window.__autosaveListenerAttached) {
+                            
+                            return;
+                        }
+                        
+                        // Clean up any existing polling and periodic save
+                        if (window.__pollingInterval) {
+                            clearInterval(window.__pollingInterval);
+                            window.__pollingInterval = null;
+                        }
+                        if (__periodicSaveTimer) {
+                            clearInterval(__periodicSaveTimer);
+                            __periodicSaveTimer = null;
+                        }
+                        
+                        // Wait for Blockly to be fully loaded
+                        if (!window.Blockly) {
+                            console.log('[Autosave] Blockly not loaded, retrying in 500ms');
+                            setTimeout(setupAutosaveListener, 500);
+                            return;
+                        }
+                        
+                        // Try multiple ways to get workspace
+                        var ws = null;
+                        if (Blockly.mainWorkspace) {
+                            ws = Blockly.mainWorkspace;
+                        } else if (typeof Blockly.getMainWorkspace === 'function') {
+                            ws = Blockly.getMainWorkspace();
+                        } else if (window.Blockly.getMainWorkspace) {
+                            ws = window.Blockly.getMainWorkspace();
+                        }
+                        
+                        console.log('[Autosave] Workspace found:', !!ws, 'Type:', typeof ws);
+                        
+                        if (!ws) {
+                            console.log('[Autosave] No workspace found, retrying in 500ms');
+                            setTimeout(setupAutosaveListener, 500);
+                            return;
+                        }
+                        
+                        // Check if workspace has addChangeListener method
+                        if (typeof ws.addChangeListener === 'function'){
+                            console.log('[Autosave] Adding change listener to workspace');
+                            ws.addChangeListener(function(event){
+                                console.log('[Blockly] Change detected:', event.type);
+                                try {
+                                    if (window.Blockly && Blockly.Events && event && event.type === Blockly.Events.UI) {
+                                        console.log('[Blockly] UI event, skipping');
+                                        return;
+                                    }
+                                    
+                                    // Get current XML
+                                    var currentXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(ws));
+                                    console.log('[Blockly] Current XML length:', currentXml.length);
+                                    
+                                    // Always save to localStorage immediately on any change
+                                    if (currentXml && currentXml.indexOf('<block') !== -1) {
+                                        saveToLocalStorage(currentXml);
+                                        // Show immediate feedback for block changes
+                                        showAutosaveStatus('Auto-saved', true, false);
+                                        // Trigger immediate autosave for blocks
+                                        console.log('[Blockly] Blocks detected, triggering immediate autosave');
+                                        if (!__autosaveInFlight) {
+                                            performAutosave();
+                                        }
+                                    } else if (!currentXml || currentXml.indexOf('<block') === -1) {
+                                        // Clear localStorage if workspace is empty
+                                        try {
+                                            localStorage.removeItem('blockly_workspace');
+                                            console.log('[Blockly] Cleared localStorage - workspace empty');
+                                        } catch(e) {
+                                            console.warn('Failed to clear localStorage:', e);
+                                        }
+                                    }
+                                    
+                                    // Always schedule autosave for any meaningful change
+                                    // Only skip if it's exactly the same XML
+                                    if (typeof window.__lastSavedXml === 'string' && window.__lastSavedXml === String(currentXml)) {
+                                        console.log('[Blockly] No XML changes, skipping autosave');
+                                        return;
+                                    }
+                                } catch(e){
+                                    console.warn('[Blockly] Error in change listener:', e);
+                                }
+                                console.log('[Blockly] Scheduling autosave');
+                                scheduleAutosave();
+                            });
+                            window.__autosaveListenerAttached = true;
+                            console.log('[Autosave] Change listener attached successfully');
+                            // Seed last-saved snapshot on first attach to prevent immediate save without changes
+                            try {
+                                if (typeof window.__lastSavedXml === 'undefined' || window.__lastSavedXml === null) {
+                                    var __initialXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(ws));
+                                    window.__lastSavedXml = String(__initialXml || '');
+                                    var __fn = document.getElementById('project-filename');
+                                    window.__lastSavedTitle = (__fn && __fn.value) ? String(__fn.value) : 'Untitled';
+                                    console.log('[Autosave] Initial XML snapshot:', window.__lastSavedXml.length, 'chars');
+                                }
+                            } catch(_){ }
+                            
+                            // Setup filename change listener for autosave
+                            setupFilenameAutosaveListener();
+                        } else {
+                            console.log('[Autosave] Workspace does not support addChangeListener, trying alternative method');
+                            // Try alternative method - polling for changes
+                            setupPollingAutosave(ws);
+                        }
+                    } catch(e){ 
+                        console.warn('[Autosave] Error setting up listener:', e);
+                    }
+                }
+                
+                function setupPollingAutosave(ws) {
+                    console.log('[Autosave] Setting up polling autosave as fallback');
+                    var lastXml = '';
+                    var pollingInterval = setInterval(function() {
+                        try {
+                            if (!ws || !window.Blockly) return;
+                            
+                            var currentXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(ws));
+                            
+                            // Check if XML has changed
+                            if (currentXml !== lastXml) {
+                                console.log('[Autosave] Polling detected change');
+                                lastXml = currentXml;
+                                
+                                // Save to localStorage immediately
+                                if (currentXml && currentXml.indexOf('<block') !== -1) {
+                                    saveToLocalStorage(currentXml);
+                                    showAutosaveStatus('Auto-saved', true, false);
+                                    
+                                    // Trigger immediate database save
+                                    if (!__autosaveInFlight) {
+                                        performAutosave();
+                                    }
+                                }
+                            }
+                        } catch(e) {
+                            console.warn('[Autosave] Polling error:', e);
+                        }
+                    }, 1000); // Check every second
+                    
+                    // Store interval ID for cleanup
+                    window.__pollingInterval = pollingInterval;
+                    window.__autosaveListenerAttached = true;
+                    
+                    // Setup filename change listener
+                    setupFilenameAutosaveListener();
+                }
+                
+                function setupPeriodicSave() {
+                    // Periodic save disabled - using immediate save on changes instead
+                    console.log('[Autosave] Periodic save disabled - using immediate save on changes');
+                }
+                
+                function setupFilenameAutosaveListener(){
+                    try {
+                        var filenameInput = document.getElementById('project-filename');
+                        if (!filenameInput) {
+                            setTimeout(setupFilenameAutosaveListener, 300);
+                            return;
+                        }
+                        
+                        // Remove existing listener if any
+                        if (filenameInput.__autosaveListenerAttached) return;
+                        
+                        filenameInput.addEventListener('input', function(){
+                            // Show immediate feedback for filename changes
+                            showAutosaveStatus('Auto-saved', true, false);
+                            // Trigger immediate autosave for filename changes
+                            if (__filenameTimer) clearTimeout(__filenameTimer);
+                            __filenameTimer = setTimeout(function(){
+                                var currentTitle = filenameInput.value || 'Untitled';
+                                // Always trigger autosave for filename changes
+                                if (!__autosaveInFlight) {
+                                    performAutosave();
+                                }
+                            }, 200); // Reduced delay for immediate save
+                        });
+                        
+                        filenameInput.__autosaveListenerAttached = true;
+                    } catch(e){ console.warn('Failed to setup filename autosave listener:', e); }
+                }
+
+                function scheduleAutosave(){
+                    if (__autosaveTimer) clearTimeout(__autosaveTimer);
+                    console.log('[Autosave] Scheduling immediate autosave');
+                    __autosaveTimer = setTimeout(performAutosave, 100); // Reduced to 100ms for immediate save
+                }
+
+                function showAutosaveStatus(message, isSuccess, isLoading) {
+                    try {
+                        // Only show autosave status if there's an active workspace
+                        if (!window.currentWorkspaceId) {
+                            console.log('[Autosave] No active workspace, skipping autosave status display');
+                            return;
+                        }
+                        
+                        // Debounce status display to avoid flickering
+                        if (__statusTimer) clearTimeout(__statusTimer);
+                        __statusTimer = setTimeout(function(){
+                            var statusEl = document.getElementById('autosave-status');
+                            if (!statusEl) return;
+                            
+                            // Update classes based on success/failure/loading
+                            var baseClasses = 'autosave-indicator absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[1002] px-4 py-2 rounded-lg text-sm font-medium text-white shadow-lg transition-all duration-300 ease-in-out opacity-100 scale-100 pointer-events-none';
+                            
+                            if (isLoading) {
+                                statusEl.className = baseClasses + ' bg-gradient-to-r from-blue-500 to-blue-600 border border-blue-400/50';
+                            } else if (isSuccess) {
+                                statusEl.className = baseClasses + ' bg-gradient-to-r from-green-500 to-green-600 border border-green-400/50';
+                            } else {
+                                statusEl.className = baseClasses + ' bg-gradient-to-r from-red-500 to-red-600 border border-red-400/50';
+                            }
+                            
+                            statusEl.style.display = 'flex';
+                            
+                            var iconClass = '';
+                            if (isLoading) {
+                                iconClass = 'autorenew animate-spin';
+                            } else if (isSuccess) {
+                                iconClass = 'check_circle';
+                            } else {
+                                iconClass = 'error';
+                            }
+                            
+                            statusEl.innerHTML = '<div class="flex items-center space-x-2"><i class="material-icons text-base">' + 
+                                               iconClass + '</i><span class="font-medium">' + message + '</span></div>';
+                            
+                            // Auto-hide after 2 seconds for better UX with Tailwind animation (skip for loading state)
+                            if (!isLoading) {
+                                setTimeout(function(){
+                                    if (statusEl) {
+                                        // Add fade out animation with Tailwind
+                                        statusEl.className = statusEl.className.replace('opacity-100 scale-100', 'opacity-0 scale-95');
+                                        setTimeout(function(){
+                                            if (statusEl) {
+                                                statusEl.style.display = 'none';
+                                                // Reset to initial state for next use
+                                                statusEl.className = statusEl.className.replace('opacity-0 scale-95', 'opacity-0 scale-95');
+                                            }
+                                        }, 300);
+                                    }
+                                }, 2000);
+                            }
+                        }, 100);
+                    } catch(e){ console.warn('Failed to show autosave status:', e); }
+                }
+
+                function saveToLocalStorage(xml) {
+                    try {
+                        if (typeof(Storage) !== "undefined" && xml) {
+                            localStorage.setItem('blockly_workspace', xml);
+                            console.log('[Blockly] Saved to localStorage:', xml.length, 'chars');
+                            
+                            // Also update the last saved XML to prevent unnecessary database saves
+                            window.__lastSavedXml = String(xml);
+                        }
+                    } catch(e) {
+                        console.warn('Failed to save to localStorage:', e);
+                    }
+                }
+
+                function performAutosave(){
+                    console.log('[Autosave] performAutosave called');
+                    if (__autosaveInFlight) {
+                        console.log('[Autosave] Already in flight, skipping');
+                        return;
+                    }
+                    
+                    // Show loading state
+                    showAutosaveStatus('Saving...', true, true);
+                    __autosaveInFlight = true;
+                    
+                    try {
+                        var userId = window.currentUserId;
+                        if (!userId) {
+                            console.log('[Autosave] No userId, skipping');
+                            __autosaveInFlight = false;
+                            return;
+                        }
+                        var xml = (window.Blockly && Blockly.mainWorkspace) ? Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)) : '';
+                        var judul = (document.getElementById('project-filename')||{}).value || 'Untitled';
+                        var currentId = window.currentWorkspaceId || null;
+                        
+                        // Always save to localStorage immediately when there are blocks
+                        if (xml && xml.indexOf('<block') !== -1) {
+                            saveToLocalStorage(xml);
+                        }
+                        
+                        // Check if we have meaningful changes to save to database
+                        var hasXmlChanges = false;
+                        var hasTitleChanges = false;
+                        
+                        // Check XML changes - always save if there are blocks
+                        if (xml && xml.indexOf('<block') !== -1) {
+                            try {
+                                var sameXml = (typeof window.__lastSavedXml === 'string' && window.__lastSavedXml === String(xml));
+                                hasXmlChanges = !sameXml;
+                            } catch(_){ hasXmlChanges = true; }
+                        } else if (xml && xml.indexOf('<block') === -1) {
+                            // Empty workspace - still save to clear database
+                            hasXmlChanges = true;
+                        }
+                        
+                        // Check title changes
+                        try {
+                            var sameTitle = (typeof window.__lastSavedTitle === 'string' && window.__lastSavedTitle === String(judul));
+                            hasTitleChanges = !sameTitle;
+                        } catch(_){ hasTitleChanges = true; }
+                        
+                        // Always save to database when called
+                        console.log('[Autosave] Changes detected - XML:', hasXmlChanges, 'Title:', hasTitleChanges);
+                        console.log('[Autosave] Forcing save to database for all changes');
+                        
+                        var payload = { userId: userId, judul: judul, bloks: xml };
+                        console.log('[Autosave] Payload:', { userId: userId, judul: judul, bloksLength: xml.length, currentId: currentId });
+                        __autosaveInFlight = true;
+                        
+                        if (!currentId) {
+                            // Only save to localStorage when no current workspace
+                            // Don't automatically create workspace - wait for user to click "Add New Project"
+                            console.log('[Autosave] No current workspace, only saving to localStorage');
+                            if (xml && xml.indexOf('<block') !== -1) {
+                                saveToLocalStorage(xml);
+                            }
+                            __autosaveInFlight = false;
+                        } else {
+                            fetch('/api/workspaces/' + encodeURIComponent(currentId), {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload)
+                            }).then(function(r){ 
+                                console.log('[Autosave] PUT response status:', r.status);
+                                return r.json(); 
+                            })
+                              .then(function(d){
+                                  console.log('[Autosave] PUT response data:', d);
+                                  if (d && d.success) {
+                                      // Update last-saved snapshot
+                                      window.__lastSavedXml = String(xml);
+                                      window.__lastSavedTitle = String(judul);
+                                      // Refresh sidebar to update workspace name
+                                      loadWorkspaces(userId);
+                                      // Show autosave status
+                                      showAutosaveStatus('Auto-saved', true, false);
+                                      
+                                  } else {
+                                      console.warn('[Autosave] Failed to update workspace:', d);
+                                      showAutosaveStatus('Auto-save failed', false, false);
+                                  }
+                              })
+                              .catch(function(err){
+                                  console.warn('Autosave failed:', err);
+                                  showAutosaveStatus('Auto-save failed', false, false);
+                              })
+                              .finally(function(){ __autosaveInFlight = false; });
+                        }
+                    } catch(e) { 
+                        console.warn('Autosave error:', e);
+                        showAutosaveStatus('Auto-save error', false, false);
+                        __autosaveInFlight = false; 
+                    }
+                }
+
+                function formatRelativeTime(dateValue){
+                    try {
+                        var then = new Date(dateValue);
+                        var now = new Date();
+                        var diffMs = now - then;
+                        var sec = Math.floor(diffMs / 1000);
+                        var min = Math.floor(sec / 60);
+                        var hr = Math.floor(min / 60);
+                        var day = Math.floor(hr / 24);
+                        if (sec < 60) return sec + ' seconds ago';
+                        if (min < 60) return min + ' minutes ago';
+                        if (hr < 24) return hr + ' hours ago';
+                        if (day === 1) return 'yesterday';
+                        return then.toLocaleString();
+                    } catch(_) { return ''; }
+                }
+
+                function escapeHtml(str){
+                    return (str||'').toString()
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#039;');
+                }
+
+                window.loadHistoryItem = function(id){
+                    if (!id) return;
+                    
+                    // Hide workspace selection message and show panels
+                    hideWorkspaceSelection();
+                    
+                    try { history.replaceState(null, '', '/block/' + encodeURIComponent(id)); } catch(_){ }
+                    fetch('/api/workspaces/' + encodeURIComponent(id))
+                      .then(function(r){ return r.json(); })
+                      .then(function(d){
+                          if (!d || !d.success || !d.workspace) return;
+                          var ws = d.workspace;
+                          var xmlText = '';
+                          try {
+                              var b = ws.bloks;
+                              if (typeof b === 'string') {
+                                  try { xmlText = JSON.parse(b); } catch(e) { xmlText = b; }
+                              } else if (b != null) {
+                                  // MySQL JSON may come as object - unwrap if it's a JSON-string container
+                                  var s = JSON.stringify(b);
+                                  try { xmlText = JSON.parse(s); } catch(e2) { xmlText = s; }
+                              }
+                              if (!xmlText || xmlText.indexOf('<xml') === -1) {
+                                  // As last resort, use as-is
+                                  xmlText = String(xmlText || '');
+                              }
+                          } catch(_) { xmlText = ''; }
+
+                          try {
+                              if (window.Blockly && Blockly.mainWorkspace && xmlText) {
+                                  var xmlDom = Blockly.Xml.textToDom(xmlText);
+                                  Blockly.mainWorkspace.clear();
+                                  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
+                                  // Sync with localStorage
+                                  saveToLocalStorage(xmlText);
+                                  if (typeof renderContent === 'function') renderContent();
+                              }
+                          } catch(err) {
+                              console.warn('Failed to load workspace XML:', err);
+                          }
+
+                          // Update filename and current id
+                          try {
+                              var fn = document.getElementById('project-filename');
+                              if (fn && ws.judul) fn.value = ws.judul;
+                              window.currentWorkspaceId = ws.id_workspace;
+                              // Snapshot last-saved XML to suppress autosave until changed
+                              window.__lastSavedXml = String(xmlText || '');
+                              window.__lastSavedTitle = (fn && fn.value) ? String(fn.value) : 'Untitled';
+                              
+                              // Update star button based on workspace data
+                              updateStarButtonFromWorkspace(ws);
+                              
+                              // Re-setup filename autosave listener after loading workspace
+                              setTimeout(function(){
+                                  setupFilenameAutosaveListener();
+                              }, 100);
+                          } catch(_){ }
+                      });
+                };
+
+                window.starHistoryItem = function(id, currentlyStarred){
+                    var desired = !currentlyStarred;
+                    
+                    // Update UI immediately
+                    var historyItem = document.querySelector('[data-id="' + id + '"]');
+                    if (historyItem) {
+                        var starIcon = historyItem.querySelector('.star-icon-item');
+                        if (starIcon) {
+                            if (desired) {
+                                starIcon.textContent = 'star';
+                                starIcon.className = 'material-icons star-icon-item starred';
+                            } else {
+                                starIcon.textContent = 'star_border';
+                                starIcon.className = 'material-icons star-icon-item unstarred';
+                            }
+                        }
+                        // Update data attribute
+                        historyItem.setAttribute('data-starred', desired ? '1' : '0');
+                    }
+                    
+                    fetch('/api/workspaces/' + encodeURIComponent(id) + '/star', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ starred: desired })
+                    })
+                    .then(function(r){ return r.json(); })
+                    .then(function(d){
+                        try {
+                            var u = JSON.parse(localStorage.getItem('user')||'{}');
+                            if (u && u.email){
+                                fetch('/api/me?email=' + encodeURIComponent(u.email))
+                                  .then(function(r){ return r.json(); })
+                                  .then(function(me){ if (me && me.success) loadWorkspaces(me.user.id_users); });
+                            }
+                        } catch(_){}
+                    });
+                };
+
+                window.deleteHistoryItem = function(id){
+                    Swal.fire({
+                        title: 'Delete Workspace',
+                        text: 'Are you sure you want to delete this workspace? This action cannot be undone.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, Delete',
+                        cancelButtonText: 'Cancel',
+                        confirmButtonColor: '#ef4444',
+                        cancelButtonColor: '#374151',
+                        background: '#1f2937',
+                        customClass: {
+                            popup: 'swal2-popup',
+                            title: 'swal2-title',
+                            htmlContainer: 'swal2-html-container',
+                            confirmButton: 'swal2-confirm',
+                            cancelButton: 'swal2-cancel',
+                            icon: 'swal2-icon'
+                        },
+                        buttonsStyling: true,
+                        reverseButtons: true,
+                        focusCancel: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Show loading state
+                            Swal.fire({
+                                title: 'Deleting...',
+                                text: 'Please wait while we delete the workspace.',
+                                icon: 'info',
+                                background: '#1f2937',
+                                customClass: {
+                                    popup: 'swal2-popup',
+                                    title: 'swal2-title',
+                                    htmlContainer: 'swal2-html-container'
+                                },
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                showConfirmButton: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+                            
+                            fetch('/api/workspaces/' + encodeURIComponent(id), { method: 'DELETE' })
+                              .then(function(r){ return r.json(); })
+                              .then(function(d){
+                                  // Close loading dialog
+                                  Swal.close();
+                                  
+                                  if (d && d.success) {
+                                      // Show success message
+                                      Swal.fire({
+                                          title: 'Deleted!',
+                                          text: 'Workspace has been successfully deleted.',
+                                          icon: 'success',
+                                          background: '#1f2937',
+                                          customClass: {
+                                              popup: 'swal2-popup',
+                                              title: 'swal2-title',
+                                              htmlContainer: 'swal2-html-container',
+                                              confirmButton: 'swal2-confirm'
+                                          },
+                                          confirmButtonColor: '#10b981',
+                                          timer: 2000,
+                                          timerProgressBar: true
+                                      });
+                                      
+                                      // Refresh workspace list
+                                      try {
+                                          var u = JSON.parse(localStorage.getItem('user')||'{}');
+                                          if (u && u.email){
+                                              fetch('/api/me?email=' + encodeURIComponent(u.email))
+                                                .then(function(r){ return r.json(); })
+                                                .then(function(me){ if (me && me.success) loadWorkspaces(me.user.id_users); });
+                                          }
+                                      } catch(_){}
+                                  } else {
+                                      // Show error message
+                                      Swal.fire({
+                                          title: 'Error!',
+                                          text: d.message || 'Failed to delete workspace. Please try again.',
+                                          icon: 'error',
+                                          background: '#1f2937',
+                                          customClass: {
+                                              popup: 'swal2-popup',
+                                              title: 'swal2-title',
+                                              htmlContainer: 'swal2-html-container',
+                                              confirmButton: 'swal2-confirm'
+                                          },
+                                          confirmButtonColor: '#ef4444'
+                                      });
+                                  }
+                              })
+                              .catch(function(error) {
+                                  // Close loading dialog
+                                  Swal.close();
+                                  
+                                  // Show error message
+                                  Swal.fire({
+                                      title: 'Error!',
+                                      text: 'Network error occurred while deleting workspace. Please try again.',
+                                      icon: 'error',
+                                      background: '#1f2937',
+                                      customClass: {
+                                          popup: 'swal2-popup',
+                                          title: 'swal2-title',
+                                          htmlContainer: 'swal2-html-container',
+                                          confirmButton: 'swal2-confirm'
+                                      },
+                                      confirmButtonColor: '#ef4444'
+                                  });
+                              });
+                        }
+                    });
+                };
+
+                // Update star icon for new project (no workspace ID yet)
+                window.updateStarIcon = function(isStarred) {
+                    // For new projects, we don't have a workspace ID yet, so just update UI state
+                    // This function is called when creating a new project to reset the star state
+                    console.log('updateStarIcon called with isStarred:', isStarred);
+                    // The star icon will be properly set when the workspace is created and loaded
+                };
+
+                // Update star button based on workspace data
+                window.updateStarButtonFromWorkspace = function(workspace) {
+                    if (!workspace) return;
+                    
+                    // Find the current workspace item in the history
+                    var historyItem = document.querySelector('[data-id="' + workspace.id_workspace + '"]');
+                    if (historyItem) {
+                        var starIcon = historyItem.querySelector('.star-icon-item');
+                        if (starIcon) {
+                            if (workspace.is_starred) {
+                                starIcon.textContent = 'star';
+                                starIcon.className = 'material-icons star-icon-item starred';
+                            } else {
+                                starIcon.textContent = 'star_border';
+                                starIcon.className = 'material-icons star-icon-item unstarred';
+                            }
+                        }
+                        // Update data attribute
+                        historyItem.setAttribute('data-starred', workspace.is_starred ? '1' : '0');
+                    }
+                };
+
+                // Enhanced sidebar search with animations
+                var searchInput = document.getElementById('sidebar-search-input');
+                var searchLoading = document.getElementById('search-loading');
+                var noResultsMessage = document.getElementById('no-results-message');
+                var searchTimeout;
+                
+                function normalize(text){ 
+                    return (text||'').toString().toLowerCase().trim(); 
+                }
+                
+                function showSearchLoading() {
+                    if (searchLoading) {
+                        searchLoading.style.display = 'block';
+                    }
+                }
+                
+                function hideSearchLoading() {
+                    if (searchLoading) {
+                        searchLoading.style.display = 'none';
+                    }
+                }
+                
+                function showNoResults() {
+                    if (noResultsMessage) {
+                        noResultsMessage.style.display = 'block';
+                        setTimeout(function() {
+                            noResultsMessage.classList.add('show');
+                        }, 100);
+                    }
+                }
+                
+                function hideNoResults() {
+                    if (noResultsMessage) {
+                        noResultsMessage.classList.remove('show');
+                        setTimeout(function() {
+                            noResultsMessage.style.display = 'none';
+                        }, 500);
+                    }
+                }
+                
+                function filterList(containerId) {
+                    var container = document.getElementById(containerId);
+                    if (!container) return;
+                    
+                    var query = normalize(searchInput.value);
+                    var items = container.children;
+                    var hasMatches = false;
+                    
+                    // Add searching animation to all items
+                    for (var i = 0; i < items.length; i++) {
+                        var item = items[i];
+                        if (item.classList.contains('history-item')) {
+                            item.classList.add('searching');
+                        }
+                    }
+                    
+                    // Filter items with animation
+                    setTimeout(function() {
+                        for (var i = 0; i < items.length; i++) {
+                            var item = items[i];
+                            if (!item.classList.contains('history-item')) continue;
+                            
+                            var title = item.getAttribute('data-title') || '';
+                            var preview = item.querySelector('.history-item-preview');
+                            var previewText = preview ? preview.textContent : '';
+                            
+                            var titleMatch = normalize(title).indexOf(query) !== -1;
+                            var previewMatch = normalize(previewText).indexOf(query) !== -1;
+                            var isMatch = query === '' || titleMatch || previewMatch;
+                            
+                            if (isMatch) {
+                                hasMatches = true;
+                                item.classList.remove('searching', 'search-no-match');
+                                item.classList.add('search-match');
+                                item.style.display = '';
+                                
+                                // Highlight matching text
+                                if (query !== '' && titleMatch) {
+                                    highlightText(item.querySelector('.history-item-title'), title, query);
+                                }
+                            } else {
+                                item.classList.remove('searching', 'search-match');
+                                item.classList.add('search-no-match');
+                                item.style.display = '';
+                            }
+                        }
+                        
+                        // Show/hide no results message
+                        if (query !== '' && !hasMatches) {
+                            showNoResults();
+                        } else {
+                            hideNoResults();
+                        }
+                    }, 150);
+                }
+                
+                function highlightText(element, text, query) {
+                    if (!element || !query) return;
+                    
+                    var regex = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+                    var highlightedText = text.replace(regex, '<mark style="background: rgba(59, 130, 246, 0.3); color: #60a5fa; padding: 2px 4px; border-radius: 4px;">$1</mark>');
+                    element.innerHTML = highlightedText;
+                }
+                
+                function clearHighlight(element) {
+                    if (!element) return;
+                    element.innerHTML = element.textContent;
+                }
+                
+                if (searchInput) {
+                    searchInput.addEventListener('input', function() {
+                        var query = this.value;
+                        
+                        // Clear previous timeout
+                        if (searchTimeout) {
+                            clearTimeout(searchTimeout);
+                        }
+                        
+                        // Show loading animation
+                        showSearchLoading();
+                        
+                        // Debounce search
+                        searchTimeout = setTimeout(function() {
+                        filterList('history-list');
+                        filterList('starred-list');
+                            hideSearchLoading();
+                            
+                        // Also refresh from server with query
+                        try {
+                            var u = JSON.parse(localStorage.getItem('user')||'{}');
+                            if (u && u.email) {
+                                fetch('/api/me?email=' + encodeURIComponent(u.email))
+                                  .then(function(r){ return r.json(); })
+                                  .then(function(d){ if (d && d.success) loadWorkspaces(d.user.id_users); });
+                            }
+                        } catch(_){}
+                        }, 300);
+                    });
+                    
+                    // Clear search on escape
+                    searchInput.addEventListener('keydown', function(e) {
+                        if (e.key === 'Escape') {
+                            this.value = '';
+                            filterList('history-list');
+                            filterList('starred-list');
+                            hideNoResults();
+                        }
+                    });
+                }
+            });
+        })();
+    </script>
+
+    <!-- Modern Split Layout Container -->
+    <div class="main-container">
+        <!-- Workspace Selection Message (shown when no workspace is selected) -->
+        <div id="workspace-selection-message" class="workspace-selection-container">
+            <div class="workspace-selection-content">
+                <i class="material-icons workspace-selection-icon">extension</i>
+                <h2 class="workspace-selection-title">Silahkan pilih workspace atau buat baru</h2>
+                <p class="workspace-selection-subtitle">Pilih workspace dari sidebar atau klik tombol "Add New Project" untuk memulai</p>
+            </div>
+        </div>
+
+        <!-- Left Panel: Blockly Workspace -->
+        <div class="left-panel" id="left-panel" style="display: none;">
+            <!-- Floating decorative elements -->
+            <i class="material-icons floating-icon">extension</i>
+            <i class="material-icons floating-icon">build</i>
+            <i class="material-icons floating-icon">settings</i>
+            
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="material-icons">extension</i>
+                    <span>Visual Programming</span>
+                </div>
+                <div class="filename-container">
+                    <input type="text" id="project-filename" class="filename-input" placeholder="Project Name" maxlength="15" value="My Project">
+                    <i class="material-icons filename-icon">edit</i>
+                </div>
+                <div class="panel-actions">
+                    <a class="action-btn dropdown-button" href="#" data-activates="dropdown1" data-tooltip="More Options">
+                        <i class="material-icons">more_vert</i>
+                    </a>
+                    <a href="#" class="action-btn tooltipped" id="discard" onclick="discard()" data-tooltip="Clear Workspace">
+                        <i class="material-icons">clear_all</i>
+                    </a>
+
+
+                
+                    <input type="file" id="load" style="display: none;">
+                </div>
+            </div>
+            <div class="workspace-container">
+                <div id="content_blocks" class="content"></div>
+            </div>
+        </div>
+
+        <!-- Resizable Divider -->
+        <div class="resizable-divider" id="resizableDivider" style="display: none;">
+            <div class="divider-handle">
+                <div class="divider-line"></div>
+                <div class="divider-grip">
+                    <i class="material-icons">drag_indicator</i>
+                </div>
+            </div>
+        </div>
+        <!-- Right Panel: Code Preview and Console -->
+        <div class="right-panel" id="right-panel" style="display: none;">
+            <!-- Floating decorative elements -->
+            <i class="material-icons floating-icon">code</i>
+            <i class="material-icons floating-icon">terminal</i>
+            <i class="material-icons floating-icon">memory</i>
+            
+            <!-- Generated Code Section -->
+            <div class="code-section">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <i class="material-icons">code</i>
+                        <span>Generated Code</span>
+                    </div>
+                    <div class="panel-actions">
+                        <a href="#" class="action-btn tooltipped" id="copy-button" data-tooltip="Copy Code" data-clipboard-target="#content_arduino">
+                            <i class="material-icons">content_copy</i>
+                        </a>
+                        <a href="#" class="action-btn tooltipped" onclick="showCode(event)" data-tooltip="Generate Code">
+                            <i class="material-icons">code</i>
+                        </a>
+                    </div>
+                </div>
+                <div class="code-container">
+                    <div class="code-with-lines">
+                        <div class="line-numbers" id="code_line_numbers"></div>
+                        <div class="code-editor">
+                            <textarea id="content_arduino" class="content" readonly wrap="off"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Console Output Section -->
+            <div class="console-section">
+                <div id="consoleOutput" class="mt-8 bg-black/50 backdrop-blur-sm rounded-lg border border-cyan-500/30 p-4 font-mono text-sm">
+                    <div class="flex items-center justify-between mb-2 border-b border-cyan-500/20 pb-2">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span class="text-cyan-500/70 text-xs font-cyber">SYSTEM OUTPUT</span>
+                    </div>
+                    <div class="h-48 overflow-y-auto custom-scrollbar space-y-2" id="consoleOutputText">
+                        <div class="text-green-400">[<span class="text-cyan-400">*</span>] System initialized...</div>
+                        <div class="text-gray-500">[<span class="text-purple-400">+</span>] Waiting for input...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <xml id="toolbox" style="display: none"><category id="category_initializes">
+    <block type="initializes_setup"></block>
+    <block type="initializes_loop"></block>
+</category>
+<category id="category_inout">
+    <category id="category_digital">
+        <block type="inout_highlow"></block>
+        <block type="inout_digitalpin"></block>
+        <block type="inout_digital_write"></block>
+        <block type="inout_custom_digital_write">
+            <value name="PIN">
+                <block type="inout_digitalpin">
+                    <field name="PIN">1</field>
+                </block>
+            </value>
+            <value name="STAT">
+                <block type="inout_highlow">
+                    <field name="BOOL">HIGH</field>
+                </block>
+            </value>
+        </block>
+        <block type="inout_digital_read"></block>
+    </category>
+    <category id="category_analog">
+        <block type="inout_analog_write">
+            <value name="NUM">
+                <block type="math_number">
+                    <field name="NUM">255</field>
+                </block>
+            </value>
+        </block>
+        <block type="inout_analog_read"></block>
+    </category>
+    <category id="category_others">
+        <block type="pulsein"></block>
+        <block type="tone"></block>
+        <block type="custom_tone">
+            <value name="FREQ">
+                <block type="math_number">
+                    <field name="NUM">255</field>
+                </block>
+            </value>
+        </block>
+    </category>
+</category>
+<category id="category_serial">
+    <block type="serial_begin">
+        <field name="BAUD">9600</field>
+    </block>
+    <block type="serial_available"></block>
+    <block type="serial_print">
+        <value name="CONTENT">
+            <block type="text">
+                <field name="TEXT"></field>
+            </block>
+        </value>
+    </block>
+    <block type="serial_println">
+        <value name="CONTENT">
+            <block type="text">
+                <field name="TEXT"></field>
+            </block>
+        </value>
+    </block>
+    <block type="serial_read"></block>
+    <block type="serial_byte_number"></block>
+</category>
+<category id="category_ethernet">
+    <category id="category_ethernet_init">
+        <block type="ethernet_begin_dhcp">
+            <value name="MAC_ADDRESS">
+                <block type="ethernet_mac_address"></block>
+            </value>
+        </block>
+        <block type="ethernet_localip"></block>
+    </category>
+    <category id="category_ethernet_client">
+        <block type="ethernet_connect">
+            <value name="SERVER">
+                <block type="text">
+                    <field name="TEXT">www.google.com</field>
+                </block>
+            </value>
+        </block>
+        <block type="ethernet_stop"></block>
+        <block type="ethernet_connected"></block>
+        <block type="ethernet_available"></block>
+        <block type="ethernet_print">
+            <value name="TEXT">
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="ethernet_println">
+            <value name="TEXT">
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="ethernet_read"></block>
+        <block type="ethernet_get_request"></block>
+        <!--block type="ethernet_post_request"></block-->
+    </category>
+</category>
+<category id="category_interrupts">
+    <block type="interrupts_attach"></block>
+    <block type="interrupts_detach"></block>
+    <block type="interrupts"></block>
+    <block type="interrupts_no"></block>
+</category>
+<category id="category_custom">
+    <category id="category_custom_blink">
+        <block type="blink_led"></block>
+    </category>
+    <category id="category_custom_lcd">
+        <block type="esp32_i2c_begin"></block>
+        <block type="lcd_print">
+            <value name="PRINT">
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+            </value>
+        </block>
+    </category>
+    <category id="category_custom_scanning">
+        <block type="i2c_scanner"></block>
+    </category>
+</category>
+<category id="category_esp32">
+    <category id="category_esp32_gpio">
+        <block type="esp32_pin_mode"></block>
+        <block type="esp32_digital_read"></block>
+    </category>
+    <category id="category_esp32_analog_pwm">
+        <block type="esp32_analog_read"></block>
+        <block type="esp32_pwm_write"></block>
+    </category>
+    <category id="category_esp32_comm">
+        <block type="esp32_i2c_begin"></block>
+        <block type="esp32_serial_begin"></block>
+        <block type="esp32_wifi_begin"></block>
+        <block type="esp32_http_get"></block>
+        <block type="esp32_mqtt_publish"></block>
+    </category>
+    <category id="category_esp32_misc">
+        <block type="esp32_delay_ms"></block>
+        <block type="esp32_touch_read"></block>
+    </category>
+    <category id="category_esp32_neopixel">
+        <block type="esp32_neopixel_begin"></block>
+        <block type="esp32_neopixel_set"></block>
+        <block type="esp32_neopixel_show"></block>
+    </category>
+</category>
+<category id="category_digital_write_parent" name="Digital Write">
+    <block type="esp32_digital_write_input"></block>
+    <block type="inout_custom_digital_write">
+        <value name="PIN">
+            <block type="math_number">
+                <field name="NUM">13</field>
+            </block>
+        </value>
+        <value name="STAT">
+            <block type="inout_highlow">
+                <field name="BOOL">HIGH</field>
+            </block>
+        </value>
+    </block>
+</category>
+<category id="category_pin_mode_parent" name="Pin Mode">
+    <block type="esp32_pin_mode_input"></block>
+</category>
+<category id="category_declaration" name="Declaration">
+    <block type="declaration_include"></block>
+    <block type="declaration_define"></block>
+</category>
+<category id="category_delay_parent" name="Delay">
+    <block type="esp32_delay_input"></block>
+</category>
+<sep id="category_sep"></sep>
+<category id="category_cloud_service">
+    <category id="category_ifttt">
+        <block type="text">
+            <field name="TEXT">maker.ifttt.com</field>
+        </block>
+        <block type="ifttt_get_url">
+            <value name="EVENT">
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+            </value>
+            <value name="KEY">
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+            </value>
+        </block>
+    </category>
+    <category id="category_m2x">
+        <block type="m2x_begin">
+            <value name="ID">
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+            </value>
+            <value name="STREAM_NAME">
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+            </value>
+            <value name="KEY">
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="m2x_update_value">
+            <value name="VALUE">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+        </block>
+        <block type="m2x_list_value"></block>
+        <block type="m2x_custom_list_value"></block>
+        <block type="m2x_delete_values"></block>
+        <block type="m2x_update_location">
+            <value name="LOCATION_NAME">
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+            </value>
+        </block>
+    </category>
+    <category id="category_blynk">
+        <block type="blynk_ethernet_begin">
+            <value name="AUTH">
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+            </value>
+            <value name="MAC_ADDRESS">
+                <block type="ethernet_mac_address"></block>
+            </value>
+        </block>
+        <block type="blynk_connect"></block>
+        <block type="blynk_write"></block>
+        <block type="blynk_param"></block>
+        <block type="blynk_merge_param"></block>
+        <block type="blynk_virtual_write">
+            <value name="VALUE">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+        </block>
+        <block type="blynk_email">
+            <value name="ADDRESS">
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+            </value>
+            <value name="TITLE">
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+            </value>
+            <value name="BODY">
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="blynk_notify">
+            <value name="TEXT">
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="blynk_tweet">
+            <value name="TEXT">
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+            </value>
+        </block>
+    </category>
+</category>
+<sep></sep>
+<category id="category_grove">
+    <category id="category_grove_input">
+        <block type="grove_button"></block>
+        <block type="grove_touch"></block>
+        <block type="grove_rotary_angle"></block>
+        <block type="grove_ir_receiver_init"></block>
+        <block type="grove_ir_receiver_check_data"></block>
+        <block type="grove_ir_receiver_receive"></block>
+        <block type="grove_ir_receiver_data"></block>
+        <!--block type="grove_tilt_switch"></block-->
+        <!--block type="grove_thumb_joystick"></block-->
+    </category>
+    <category id="category_grove_output">
+        <block type="grove_led"></block>
+        <block type="grove_relay"></block>
+        <block type="grove_buzzer"></block>
+        <block type="grove_ir_emitter_send">
+            <value name="DATA">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <!--block type="grove_rgb_led"></block-->
+        <!--block type="grove_motor_shield"></block-->
+    </category>
+    <category id="category_grove_sensor">
+        <!--block type="grove_line_finder"></block-->
+        <!--block type="grove_pir_motion_sensor"></block-->
+        <block type="grove_light_sensor"></block>
+        <block type="grove_temporature_sensor"></block>
+        <block type="grove_sound_sensor"></block>
+        <!--block type="grove_ultrasonic_ranger"></block-->
+    </category>
+    <category id="category_lcd_rgb">
+        <block type="grove_rgb_lcd_begin"></block>
+        <block type="grove_rgb_lcd_print">
+            <value name="PRINT">
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="grove_rgb_lcd_setcolor"></block>
+        <block type="grove_rgb_lcd_custom_setcursor">
+            <value name="COL">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="ROW">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="grove_rgb_lcd_clear"></block>
+        <!--block type="lcd_scrolldisplayright"></block-->
+        <!--block type="lcd_scrolldisplayleft"></block-->
+        <block type="grove_rgb_lcd_switch_scroll"></block>
+        <!--block type="lcd_lefttoright"></block-->
+        <!--block type="lcd_righttoleft"></block-->
+        <!--block type="grove_serial_lcd_power"></block-->
+        <!--block type="grove_serial_lcd_effect"></block-->
+    </category>
+</category>
+<category id="category_adafruit">
+    <category id="category_rgbled">
+        <block type="rgbled_begin"></block>
+        <!--block type="rgbled_setpixelcolor"></block-->
+        <block type="rgbled_setpixelcolor2">
+            <value name="TARGET">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="rgbled_custom_setpixelcolor">
+            <value name="TARGET">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="R">
+                <block type="math_number">
+                    <field name="NUM">255</field>
+                </block>
+            </value>
+            <value name="G">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="rgbled_show"></block>
+    </category>
+    <category id="category_neopixel">
+        <block type="neopixel_begin"></block>
+        <!--block type="neopixel_setpixelcolor"></block-->
+        <block type="neopixel_setpixelcolor">
+            <value name="TARGET">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="neopixel_custom_setpixelcolor">
+            <value name="TARGET">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="R">
+                <block type="math_number">
+                    <field name="NUM">255</field>
+                </block>
+            </value>
+            <value name="G">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="neopixel_show"></block>
+    </category>
+    <category id="category_i2c_matrix">
+        <block type="i2c_matrix_begin"></block>
+        <block type="i2c_matrix_clear"></block>
+        <block type="i2c_matrix_writedisplay"></block>
+        <block type="i2c_matrix_setcursor">
+            <value name="COL">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="ROW">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="i2c_matrix_settextsize"></block>
+        <block type="i2c_matrix_settextwrap"></block>
+        <block type="i2c_matrix_settextcolor"></block>
+        <block type="i2c_matrix_print">
+            <value name="CONTENT">
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="i2c_matrix_setrotation"></block>
+        <block type="i2c_matrix_drawpixel">
+            <value name="X">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="Y">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="i2c_matrix_drawline">
+            <value name="X0">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="Y0">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="X1">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="Y1">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="i2c_matrix_drawcircle">
+            <value name="X">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="Y">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="D">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="i2c_matrix_drawrect">
+            <value name="X0">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="Y0">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="X1">
+                <block type="math_number">
+                    <field name="NUM">5</field>
+                </block>
+            </value>
+            <value name="Y1">
+                <block type="math_number">
+                    <field name="NUM">5</field>
+                </block>
+            </value>
+        </block>
+        <block type="i2c_matrix_fillrect">
+            <value name="X0">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="Y0">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="X1">
+                <block type="math_number">
+                    <field name="NUM">5</field>
+                </block>
+            </value>
+            <value name="Y1">
+                <block type="math_number">
+                    <field name="NUM">5</field>
+                </block>
+            </value>
+        </block>
+    </category>
+    <category id="category_i2c_sevenseg">
+        <block type="i2c_sevenseg_begin"></block>
+        <block type="i2c_sevenseg_writedisplay"></block>
+        <block type="i2c_sevenseg_print">
+            <value name="NUM">
+                <block type="math_number">
+                    <field name="NUM">7777</field>
+                </block>
+            </value>
+        </block>
+        <block type="i2c_sevenseg_writedigitnum">
+            <value name="POSITION">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="NUM">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+            <value name="DOTS">
+                <block type="i2c_sevenseg_boolean">
+                    <field name="BOOL">TRUE</field>
+                </block>
+            </value>
+        </block>
+        <block type="i2c_sevenseg_drawcolon">
+            <value name="DOTS">
+                <block type="i2c_sevenseg_boolean">
+                    <field name="BOOL">TRUE</field>
+                </block>
+            </value>
+        </block>
+        <block type="i2c_sevenseg_boolean"></block>
+    </category>
+    <category id="category_mpr121">
+        <block type="mpr121_begin"></block>
+        <block type="mpr121_touched">
+            <value name="CH">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="mpr121_released">
+            <value name="CH">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="mpr121_value">
+            <value name="CH">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="mpr121_reset"></block>
+    </category>
+</category>
+<category id="category_robot">
+    <category id="category_shield_bot">
+        <block type="shield_bot_setmaxspeed"></block>
+        <block type="shield_bot_setmaxspeed_lr"></block>
+        <block type="shield_bot_move"></block>
+        <block type="shield_bot_drive">
+            <value name="LEFT">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="RIGHT">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="shield_bot_motor">
+            <value name="DIRECTION">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="shield_bot_readsensor"></block>
+    </category>
+    <category id="category_aerobot">
+        <block type="aerobot_move"></block>
+        <block type="aerobot_rotate"></block>
+        <block type="aerobot_lightsens"></block>
+        <block type="aerobot_distsens"></block>
+        <block type="aerobot_linesens"></block>
+        <block type="aerobot_setled"></block>
+    </category>
+</category>
+<category id="category_servo">
+    <block type="servo_write">
+        <value name="ANGLE">
+            <block type="math_number">
+                <field name="NUM">0</field>
+            </block>
+        </value>
+    </block>
+    <block type="servo_writeus">
+        <value name="ANGLE_US">
+            <block type="math_number">
+                <field name="NUM">0</field>
+            </block>
+        </value>
+    </block>
+    <block type="servo_read"></block>
+    <block type="servo_attached"></block>
+    <block type="servo_attach"></block>
+    <block type="servo_custom_attach"></block>
+    <block type="servo_detach"></block>
+</category>
+<category id="category_ultrasonic">
+    <block type="ultrasonic_setting"></block>
+    <block type="ultrasonic_maxrange"></block>
+    <block type="ultrasonic_distance"></block>
+</category>
+<category id="category_lcd">
+    <block type="lcd_init"></block>
+    <block type="lcd_begin"></block>
+    <block type="lcd_print">
+        <value name="PRINT">
+            <block type="text">
+                <field name="TEXT"></field>
+            </block>
+        </value>
+    </block>
+    <!--block type="lcd_setcursor"></block-->
+    <block type="lcd_custom_setcursor">
+        <value name="COL">
+            <block type="math_number">
+                <field name="NUM">0</field>
+            </block>
+        </value>
+        <value name="ROW">
+            <block type="math_number">
+                <field name="NUM">0</field>
+            </block>
+        </value>
+    </block>
+    <block type="lcd_clear"></block>
+    <!--block type="lcd_scrolldisplayright"></block-->
+    <!--block type="lcd_scrolldisplayleft"></block-->
+    <block type="lcd_switch_scroll"></block>
+    <!--block type="lcd_autoscroll"></block>
+<block type="lcd_noautoscroll"></block-->
+    <!--block type="lcd_lefttoright"></block-->
+    <!--block type="lcd_righttoleft"></block-->
+</category>
+<category id="category_other_sensor">
+    <block type="dht_read"></block>
+</category>
+<sep></sep>
+<category id="category_logic">
+    <block type="controls_if"></block>
+    <block type="logic_compare"></block>
+    <block type="logic_operation"></block>
+    <block type="logic_negate"></block>
+    <block type="logic_boolean"></block>
+</category>
+<category id="category_loops">
+    <block type="controls_repeat"></block>
+    <block type="controls_for">
+        <value name="FROM">
+            <block type="math_number">
+                <field name="NUM">0</field>
+            </block>
+        </value>
+        <value name="TO">
+            <block type="math_number">
+                <field name="NUM">10</field>
+            </block>
+        </value>
+    </block>
+    <block type="controls_while">
+        <value name="BOOL">
+            <block type="logic_boolean">
+                <field name="BOOL">TRUE</field>
+            </block>
+        </value>
+    </block>
+    <block type="controls_flow_statements"></block>
+    <block type="controls_return"></block>
+</category>
+<category id="category_time">
+    <block type="millis"></block>
+    <block type="micros"></block>
+    <block type="delay_custom">
+        <value name="DELAY_TIME">
+            <block type="math_number">
+                <field name="NUM">1000</field>
+            </block>
+        </value>
+    </block>
+    <block type="delayMicroseconds_custom">
+        <value name="DELAY_TIME">
+            <block type="math_number">
+                <field name="NUM">1000</field>
+            </block>
+        </value>
+    </block>
+</category>
+<category id="category_array">
+    <block type="array_create_with"></block>
+    <block type="array_getIndex">
+        <value name="AT">
+            <block type="math_number">
+                <field name="NUM">1</field>
+            </block>
+        </value>
+    </block>
+</category>
+<category id="category_math">
+    <block type="math_number"></block>
+    <block type="cast_number"></block>
+    <block type="math_arithmetic"></block>
+    <block type="math_single"></block>
+    <block type="math_constrain"></block>
+    <block type="math_pow"></block>
+    <block type="math_random_max_min"></block>
+    <block type="math_map"></block>
+    <block type="math_custom_map"></block>
+</category>
+<category id="category_text">
+    <block type="text"></block>
+    <block type="text_commentout"></block>
+    <block type="text_length"></block>
+    <block type="text_charAt">
+        <value name="INDEX">
+            <block type="math_number">
+                <field name="NUM">1</field>
+            </block>
+        </value>
+    </block>
+</category>
+<sep></sep>
+<category id="category_variables" custom="VARIABLE"></category>
+<category id="category_functions" custom="PROCEDURE"></category>
+<sep></sep>
+<!--category id="category_involt">
+<block type="involt_directmode"></block>
+<block type="involt_chromereceive"></block>
+<block type="involt_sendvalue"></block>
+<block type="involt_receivevalue"></block>
+</category--></xml>
+
+
+</body>
+
+</html>

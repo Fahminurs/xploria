@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title || 'Xploria - Educational Platform' %></title>
+  <link rel="icon" type="image/png" href="/image_xploria/logo.png">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/font-styles.css">
+  <link rel="stylesheet" href="/icon.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Short+Stack&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+  
+  <script src="/email.js"></script>
+
+
+  <header>
+    <div class="header-container container">
+      <div class="logo">
+            <img style="width: 5rem; height: 5rem;" src="/image_xploria/logo.png" alt="Xploria Logo">
+        <span class="logo-text short-stack-bold">Xploria</span>
+      </div>
+      <nav class="short-stack-regular">
+        <a href="#products" data-translate="products">Products</a>
+        <a href="#game" data-translate="games">Games</a>
+        <a href="#stem" data-translate="stem">STEM</a>
+        <a href="#partners" data-translate="partners">Partners</a>
+        <a href="#contact" data-translate="contact">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <div class="language-switcher">
+          <button class="language-btn" id="languageBtn">
+            <span class="language-text" data-translate="currentLang">EN</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+          <div class="language-dropdown short-stack-regular">
+            <div class="language-option" data-lang="en">English</div>
+            <div class="language-option" data-lang="id">Bahasa Indonesia</div>
+            <div class="language-option" data-lang="zh">中文</div>
+            <div class="language-option" data-lang="ar">العربية</div>
+          </div>
+        </div>
+        <div class="theme-toggle">
+          <input type="checkbox" id="toggle_checkbox">
+          <label for="toggle_checkbox">
+            <div id="star">
+              <div id="star-1" class="star">★</div>
+              <div id="star-2" class="star">★</div>
+            </div>
+            <div id="moon"></div>
+          </label>
+        </div>
+        <button class="mobile-menu-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" x2="20" y1="12" y2="12" />
+            <line x1="4" x2="20" y1="6" y2="6" />
+            <line x1="4" x2="20" y1="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="mobile-menu">
+      <div class="container short-stack-regular">
+        <a href="#products" class="mobile-link">Products</a>
+        <a href="#game" class="mobile-link">Games</a>
+        <a href="#stem" class="mobile-link">STEM</a>
+        <a href="#partners" class="mobile-link">Partners</a>
+        <a href="#contact" class="mobile-link">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="banner">
+    <div class="banner-shapes">
+      <div class="banner-shape banner-shape-1"></div>
+      <div class="banner-shape banner-shape-2"></div>
+      <div class="banner-shape banner-shape-3"></div>
+    </div>
+    <div class="container">
+      <div class="banner-content">
+        <div class="banner-text">
+          <h1 class="banner-title short-stack-bold" data-translate="bannerTitle">Fun Learning Adventures for Curious Minds!</h1>
+          <p class="banner-subtitle short-stack-regular" data-translate="bannerSubtitle">Discover interactive STEM activities that make
+            learning exciting</p>
+          <% if (typeof user !== 'undefined' && user) { %>
+            <p class="welcome-message">Welcome back, <%= user.name || user.email %>!</p>
+          <% } %>
+          <a href="/login" class="btn btn-yellow" data-translate="startLearning">Start Learning Now!</a>
+        </div>
+        <div class="banner-image">
+          <div class="banner-image-container">
+            <div class="banner-image-circle">
+                <img
+                src="https://images.unsplash.com/photo-1485546246426-74dc88dec4d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                alt="Kids learning">
+            </div>
+            <div class="banner-icon banner-icon-1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
+                <path d="M9 18h6" />
+                <path d="M10 22h4" />
+              </svg>
+            </div>
+            <div class="banner-icon banner-icon-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+                <path
+                  d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+                <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+                <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="products" class="products">
+    <div class="container">
+      <h2 class="section-title short-stack-bold" data-translate="exploreProducts">Explore Our Products</h2>
+      <div class="section-divider"></div>
+      <div class="products-container">
+        <button class="scroll-btn scroll-btn-left">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+        </button>
+        <div class="products-scroll">
+          <div class="product-card">
+            <div class="product-content">
+              <div class="product-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2" />
+                  <path d="M8.5 2h7" />
+                  <path d="M7 16h10" />
+                </svg>
+              </div>
+              <h3 class="product-title short-stack-bold" data-translate="scienceKit">Pelaksanaan Kursus</h3>
+              <p class="product-description short-stack-regular" data-translate="scienceKitDesc">Pelaksanaan program kursus secara onsite,
+                online, bootcamp holiday atau workshop</p>
+              <img
+                src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                alt="Science Kit" class="product-image">
+              <a href="#" class="btn btn-primary short-stack-regular">Learn More</a>
+            </div>
+          </div>
+          <div class="product-card green">
+            <div class="product-content">
+              <div class="product-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 8V4H8" />
+                  <rect width="16" height="12" x="4" y="8" rx="2" />
+                  <path d="M2 14h2" />
+                  <path d="M20 14h2" />
+                  <path d="M15 13v2" />
+                  <path d="M9 13v2" />
+                </svg>
+              </div>
+              <h3 class="product-title short-stack-bold" data-translate="codingRobot">Integrasi Kurikulum</h3>
+              <p class="product-description short-stack-regular" data-translate="codingRobotDesc">Integrasi kurikulum iroschool & sekolah,
+                berbasis STEM</p>
+              <img
+                src="https://images.unsplash.com/photo-1535378917042-10a22c95931a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                alt="Coding Robot" class="product-image">
+              <a href="#" class="btn btn-primary short-stack-regular">Learn More</a>
+            </div>
+          </div>
+          <div class="product-card yellow">
+            <div class="product-content">
+              <div class="product-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.743-.95l.235-1.881c.059-.47-.177-.94-.587-1.174a1.05 1.05 0 0 0-1.174.117l-.763.764c-.236.235-.553.353-.871.353H9.232c-.318 0-.636-.118-.871-.353l-.762-.764a1.05 1.05 0 0 0-1.175-.117c-.41.235-.646.705-.587 1.174l.235 1.88c.059.471-.273.882-.743.951a.98.98 0 0 1-.837-.276L2.87 13.704A2.41 2.41 0 0 1 2.165 12c0-.617.236-1.234.706-1.704L4.44 8.728c.23-.23.337-.556.289-.878L4.5 6.062c-.07-.47.058-.94.41-1.234.352-.293.822-.41 1.292-.293l1.85.412a.97.97 0 0 0 .968-.235l1.086-1.086A.97.97 0 0 1 10.341 3h2.318c.318 0 .636.117.87.352l1.086 1.086a.97.97 0 0 0 .969.235l1.85-.412c.47-.117.94 0 1.292.293.352.294.48.764.41 1.234l-.229.788Z" />
+                </svg>
+              </div>
+              <h3 class="product-title short-stack-bold" data-translate="mathPuzzle">Stadium Generale</h3>
+              <p class="product-description short-stack-regular" data-translate="mathPuzzleDesc">Penyampaian materi teknologi yang related
+                dengan pelajaran dari ahli yang diundang oleh iroschool.</p>
+              <img
+                src="https://images.unsplash.com/photo-1509228627152-72ae9ae6848d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                alt="Math Puzzle Box" class="product-image">
+              <a href="#" class="btn btn-primary">Learn More</a>
+            </div>
+          </div>
+          <div class="product-card red">
+            <div class="product-content">
+              <div class="product-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
+                </svg>
+              </div>
+              <h3 class="product-title short-stack-bold" data-translate="natureKit">Program Ekskul</h3>
+              <p class="product-description short-stack-regular" data-translate="natureKitDesc">Pelaksanaan program ekskul dari kursus
+                iroschool.</p>
+              <img
+                src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                alt="Nature Explorer Kit" class="product-image">
+              <a href="#" class="btn btn-primary">Learn More</a>
+            </div>
+          </div>
+          <div class="product-card purple">
+            <div class="product-content">
+              <div class="product-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v20" />
+                  <path d="M2 12h20" />
+                  <path d="m12 2 4 4" />
+                  <path d="m12 2-4 4" />
+                  <path d="m12 22-4-4" />
+                  <path d="m12 22 4-4" />
+                  <path d="m2 12 4 4" />
+                  <path d="m2 12 4-4" />
+                  <path d="m22 12-4 4" />
+                  <path d="m22 12-4-4" />
+                </svg>
+              </div>
+              <h3 class="product-title short-stack-bold" data-translate="competitionKit">Program Kompetisi</h3>
+              <p class="product-description short-stack-regular" data-translate="competitionKitDesc">Persiapan dan pelaksanaan kompetisi
+                robotik, coding, dan STEM lainnya.</p>
+              <img
+                src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                alt="Competition Kit" class="product-image">
+              <a href="#" class="btn btn-primary">Learn More</a>
+            </div>
+          </div>
+        </div>
+        <button class="scroll-btn scroll-btn-right">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section id="game" class="drag-drop">
+    <div class="container">
+      <h2 class="section-title short-stack-bold" data-translate="gameTitle">Fun Learning with Drag & Drop!</h2>
+      <p class="gameSubtitle short-stack-regular" data-translate="gameSubtitle">Match the shapes with their correct shadows!</p>
+      <div class="section-divider"></div>
+      <div class="game-container">
+        <div id="game-area" class="game-area">
+          <div id="shapes-container-left" class="shapes-container">
+            <div id="shape-circle" class="shape shape-circle" draggable="true" data-shape="circle"
+              style="background-color: #FF5733;"></div>
+            <div id="shape-square" class="shape shape-square" draggable="true" data-shape="square"
+              style="background-color: #33FF57;"></div>
+          </div>
+          <div class="drop-zones">
+            <div id="zone-circle" class="drop-zone" data-shape="circle">
+              <div class="shadow-shape">
+                <div class="shape-circle" style="background-color: #D1D5DB;"></div>
+              </div>
+            </div>
+            <div id="zone-square" class="drop-zone" data-shape="square">
+              <div class="shadow-shape">
+                <div class="shape-square" style="background-color: #D1D5DB;"></div>
+              </div>
+            </div>
+            <div id="zone-triangle" class="drop-zone" data-shape="triangle">
+              <div class="shadow-shape">
+                <div class="shape-triangle" style="border-bottom-color: #D1D5DB;"></div>
+              </div>
+            </div>
+            <div id="zone-star" class="drop-zone" data-shape="star">
+              <div class="shadow-shape">
+                <svg width="50" height="50" viewBox="0 0 24 24" fill="#D1D5DB">
+                  <polygon
+                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div id="shapes-container-right" class="shapes-container">
+            <div id="shape-triangle" class="shape shape-triangle" draggable="true" data-shape="triangle"
+              style="border-bottom-color: #3357FF;"></div>
+            <div id="shape-star" class="shape shape-star" draggable="true" data-shape="star">
+              <svg width="50" height="50" viewBox="0 0 24 24" fill="#F3FF33">
+                <polygon
+                  points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div id="success-message" class="success-message" style="display: none;">
+          <div class="success-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+          </div>
+          <h3 class="success-title short-stack-bold" data-translate="greatJob">Great job!</h3>
+          <p class="success-text short-stack-regular" data-translate="successText">You matched all the shapes correctly!</p>
+          <button id="play-again" class="btn btn-primary" data-translate="playAgain">Play Again</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stem" class="stem">
+    <div class="container">
+      <h2 class="section-title short-stack-bold" data-translate="discoverSTEM">Discover STEM Projects</h2>
+      <div class="section-divider"></div>
+      <div class="stem-categories">
+        <button class="stem-category aicoding active short-stack-regular" data-category="aicoding">
+          <span class="hugeicons--ai-scan"></span>
+          <span data-translate="aicoding">AI Coding</span>
+        </button>
+        <button class="stem-category iotdeveloper short-stack-regular" data-category="iotdeveloper">
+          <span class="lucide--circuit-board"></span>
+          <span data-translate="iotdeveloper">IOT Developer</span>
+        </button>
+        <button class="stem-category robotics short-stack-regular" data-category="robotics">
+          <span class="ix--robotic-arm"></span>
+          <span data-translate="robotics">Robotics</span>
+        </button>
+        <button class="stem-category webbase short-stack-regular" data-category="webbase">
+          <span class="mdi--web"></span>
+          <span data-translate="webbase">Web Based Programming</span>
+        </button>
+        <button class="stem-category basic short-stack-regular" data-category="basic">
+          <span class="hugeicons--python"></span>
+          <span data-translate="basic">Basic Programming</span>
+        </button>
+      </div>
+      <div class="stem-content">
+        <!-- Content will be dynamically inserted here by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <section id="partners" class="partners">
+    <div class="container">
+      <h2 class="section-title short-stack-bold" data-translate="amazingPartners">Our Amazing Partners</h2>
+      <div class="section-divider"></div>
+      <div class="partners-grid">
+        <div class="partner-card">
+          <img src="/image_xploria/ui.png" alt="Education First" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/itb.png" alt="Kids Academy" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/pens.png" alt="Science World" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/ugm.png" alt="Tech for Kids" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/its.png" alt="Learning Center" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/polban.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/telkom.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/polinegerijakarta.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/upi.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/dtu-1-logo-png-transparent.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/eth_zurichpng.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/istanbul_university.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/kanazawa.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/logo-mit-icon-1024.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/mie.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/ScienceTokyo_LOGO-B_RGB_S.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/sheffield.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/Stanford-Emblema.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/UC-Berkeley-Emblem.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image_xploria/university_of_warwick.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <!-- Duplicate partner cards for seamless scrolling -->
+        <div class="partner-card">
+          <img src="/image/ui.png" alt="Education First" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/itb.png" alt="Kids Academy" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/pens.png" alt="Science World" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/ugm.png" alt="Tech for Kids" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/its.png" alt="Learning Center" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/polban.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/telkom.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/polinegerijakarta.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/upi.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/dtu-1-logo-png-transparent.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/eth_zurichpng.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/istanbul_university.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/kanazawa.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/logo-mit-icon-1024.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/mie.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/ScienceTokyo_LOGO-B_RGB_S.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/sheffield.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/Stanford-Emblema.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/UC-Berkeley-Emblem.png" alt="Future Minds" class="partner-logo">
+        </div>
+        <div class="partner-card">
+          <img src="/image/university_of_warwick.png" alt="Future Minds" class="partner-logo">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="container">
+      <h2 class="section-title" data-translate="letsChat">Let's Chat!</h2>
+      <p class="text-center text-xl text-gray-600 dark:text-gray-300 mb-4" data-translate="contactSubtitle">Have
+        questions or want to learn more? Send us a message!</p>
+      <div class="section-divider"></div>
+      <div class="contact-container">
+        <div class="contact-card">
+          <div class="contact-grid">
+            <div class="contact-info">
+              <div class="contact-info-header">
+                <h3 class="contact-info-title" data-translate="getInTouch">Get in Touch</h3>
+                <p class="contact-info-text" data-translate="contactIntro">We love hearing from parents, teachers, and
+                  young learners!</p>
+              </div>
+              <div class="contact-details">
+                <div class="contact-detail">
+                  <div class="contact-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect width="20" height="16" x="2" y="4" rx="2" />
+                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                    </svg>
+                  </div>
+                  <div class="contact-detail-content">
+                    <p class="contact-detail-label" data-translate="email">Email</p>
+                    <p class="contact-detail-value">cs@irostech.com</p>
+                  </div>
+                </div>
+                <div class="contact-detail">
+                  <div class="contact-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path
+                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                  </div>
+                  <div class="contact-detail-content">
+                    <p class="contact-detail-label" data-translate="phone">Phone</p>
+                    <p class="contact-detail-value">+62-851-8321-8391</p>
+                    <p class="contact-detail-value">+62-851-5754-6991</p>
+                  </div>
+                </div>
+                <div class="contact-detail">
+                  <div class="contact-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  </div>
+                  <div class="contact-detail-content">
+                    <p class="contact-detail-label" data-translate="address">Address</p>
+                    <p class="contact-detail-value">Graha Pos Indonesia, Point Lab Bandung 2nd Floor, Jl. Banda No.30,
+                      Citarum, Kota Bandung, Jawa Barat</p>
+                  </div>
+                </div>
+              </div>
+              <div class="contact-social">
+                <a href="https://www.instagram.com/iroschool_4g" class="social-link" target="_blank">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                  </svg>
+                  <span class="social-text">iroschool_4g</span>
+                </a>
+                <a href="https://www.youtube.com/c/Iroschool4GOfficial" class="social-link" target="_blank">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                      d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
+                    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
+                  </svg>
+                  <span class="social-text">Iroschool 4G Official</span>
+                </a>
+              </div>
+            </div>
+            <div class="contact-form">
+              <div id="form-container">
+                <form id="contact-form" onsubmit="event.preventDefault(); sendMail();">
+                  <div class="form-group">
+                    <label for="name" class="form-label" data-translate="name">Name</label>
+                    <input type="text" id="name" name="name" class="form-input" placeholder="Your name" required>
+                    <div id="name-error" class="form-error"></div>
+                  </div>
+                  <div class="form-group">
+                    <label for="email" class="form-label" data-translate="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="your.email@example.com" required>
+                    <div id="email-error" class="form-error"></div>
+                  </div>
+                  <div class="form-group">
+                    <label for="message" class="form-label" data-translate="message">Message</label>
+                    <textarea id="message" name="message" class="form-textarea" placeholder="Your message here..." required></textarea>
+                    <div id="message-error" class="form-error"></div>
+                  </div>
+                  <button type="submit" class="form-submit" id="submit-btn" data-translate="sendMessage">Send Message</button>
+                </form>
+              </div>
+              <div id="form-success" class="form-success" style="display: none;">
+                <div class="success-check">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                  </svg>
+                </div>
+                <h3 class="success-title" data-translate="messageSent">Message Sent!</h3>
+                <p class="success-text" data-translate="thankYou">Thank you for reaching out. We'll get back to you
+                  soon!</p>
+                <button class="btn btn-primary" onclick="location.reload()" data-translate="sendAnother">Send Another
+                  Message</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© <%= new Date().getFullYear() %> Xploria. Powered by <a href="https://irostech.com" style="color: #fff;" target="_blank">Iroschool - PT. Irostech Solusi Inteligen</a>.</p>
+      <% if (typeof serverTime !== 'undefined') { %>
+        <p class="server-time">Server Time: <%= serverTime %></p>
+      <% } %>
+    </div>
+  </footer>
+
+  <script src="/translations.js"></script>
+  <script src="/script.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="/email.js"></script>
+</body>
+
+</html>

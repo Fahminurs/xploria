@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - Xploria</title>
+    
+    <!-- Materialize CSS -->
+    <link type="text/css" rel="stylesheet" href="/css/materialize.min.css" media="screen,projection">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #ffffff;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+            border-radius: 2px;
+        }
+        
+        .profile-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .profile-header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+        
+        .profile-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+        }
+        
+        .profile-section {
+            margin-bottom: 40px;
+        }
+        
+        .profile-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title .material-icons {
+            font-size: 24px;
+            color: #3b82f6;
+        }
+        
+        .profile-photo-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .profile-photo-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-photo:hover {
+            border-color: #3b82f6;
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+        }
+        
+        .profile-photo-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .profile-photo-container:hover .profile-photo-overlay {
+            opacity: 1;
+        }
+        
+        .photo-upload-icon {
+            color: #ffffff;
+            font-size: 32px;
+        }
+        
+        .photo-upload-text {
+            color: #ffffff;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .upload-btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .upload-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            color: #e2e8f0;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(51, 65, 85, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: rgba(51, 65, 85, 0.7);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .form-input::placeholder {
+            color: #64748b;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border: none;
+            border-radius: 12px;
+            padding: 16px 32px;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(51, 65, 85, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px 32px;
+            color: #e2e8f0;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(51, 65, 85, 0.7);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .success-message {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            color: #22c55e;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            color: #ef4444;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(51, 65, 85, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-btn:hover {
+            background: rgba(51, 65, 85, 0.7);
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .profile-card {
+                padding: 20px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        /* SweetAlert2 Dark Theme Customization */
+        .swal2-popup {
+            background: #1f2937 !important;
+            border-radius: 20px !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+        }
+        
+        .swal2-title {
+            color: #ffffff !important;
+            font-weight: 600 !important;
+            font-size: 24px !important;
+        }
+        
+        .swal2-html-container {
+            color: #d1d5db !important;
+            font-size: 16px !important;
+        }
+        
+        .swal2-actions {
+            gap: 12px !important;
+        }
+        
+        .swal2-confirm {
+            background: #3b82f6 !important;
+            border: none !important;
+            border-radius: 25px !important;
+            padding: 12px 24px !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
+        }
+        
+        .swal2-confirm:hover {
+            background: #1d4ed8 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4) !important;
+        }
+        
+        .swal2-cancel {
+            background: #374151 !important;
+            border: 1px solid #4b5563 !important;
+            border-radius: 25px !important;
+            padding: 12px 24px !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            color: #ffffff !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .swal2-cancel:hover {
+            background: #4b5563 !important;
+            border-color: #6b7280 !important;
+            transform: translateY(-2px) !important;
+        }
+        
+        .swal2-icon {
+            border-radius: 50% !important;
+        }
+        
+        .swal2-icon.swal2-warning {
+            border-color: #f59e0b !important;
+            color: #f59e0b !important;
+        }
+        
+        .swal2-icon.swal2-warning .swal2-icon-content {
+            color: #f59e0b !important;
+        }
+        
+        .swal2-icon.swal2-success {
+            border-color: #10b981 !important;
+            color: #10b981 !important;
+        }
+        
+        .swal2-icon.swal2-success .swal2-icon-content {
+            color: #10b981 !important;
+        }
+        
+        .swal2-icon.swal2-error {
+            border-color: #ef4444 !important;
+            color: #ef4444 !important;
+        }
+        
+        .swal2-icon.swal2-error .swal2-icon-content {
+            color: #ef4444 !important;
+        }
+    </style>
+</head>
+<body>
+    <a href="/block" class="back-btn">
+        <i class="material-icons">arrow_back</i>
+        Back to Workspace
+    </a>
+    
+    <div class="container">
+        <div class="profile-header">
+            <h1>Edit Profile</h1>
+            <p>Customize your profile information</p>
+        </div>
+        
+        <div class="profile-card">
+            
+            <div class="profile-section">
+                <div class="section-title">
+                    <i class="material-icons">photo_camera</i>
+                    Profile Photo
+                </div>
+                
+                <div class="profile-photo-section">
+                    <div class="profile-photo-container">
+                        <img id="profile-photo" src="/image_xploria/logo.png" alt="Profile Photo" class="profile-photo">
+                        <div class="profile-photo-overlay" onclick="document.getElementById('photo-input').click()">
+                            <div>
+                                <i class="material-icons photo-upload-icon">camera_alt</i>
+                                <div class="photo-upload-text">Change Photo</div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="file" id="photo-input" class="file-input" accept="image/*">
+                
+                </div>
+            </div>
+            
+            <div class="profile-section">
+                <div class="section-title">
+                    <i class="material-icons">person</i>
+                    Personal Information
+                </div>
+                
+                <form id="profile-form">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" id="full-name" class="form-input" placeholder="Enter your full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" id="email" class="form-input" placeholder="Enter your email" readonly>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="action-buttons">
+                <button type="button" class="btn-secondary" onclick="cancelEdit()">
+                    <i class="material-icons">close</i>
+                    Cancel
+                </button>
+                <button type="button" class="btn-primary" onclick="saveProfile()">
+                    <i class="material-icons">save</i>
+                    <span id="save-text">Save Changes</span>
+                    <div class="loading-spinner" id="save-spinner"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Load user data
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+        });
+        
+        function loadUserData() {
+            try {
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
+                if (user.email) {
+                    document.getElementById('email').value = user.email;
+                    
+                    // Combine first_name and last_name or use name field
+                    let fullName = '';
+                    if (user.first_name && user.last_name) {
+                        fullName = `${user.first_name} ${user.last_name}`.trim();
+                    } else if (user.name) {
+                        fullName = user.name;
+                    } else if (user.first_name) {
+                        fullName = user.first_name;
+                    } else if (user.last_name) {
+                        fullName = user.last_name;
+                    }
+                    document.getElementById('full-name').value = fullName;
+                    
+                    if (user.profile_photo) {
+                        document.getElementById('profile-photo').src = user.profile_photo;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        // Handle photo upload
+        document.getElementById('photo-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profile-photo').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        function saveProfile() {
+            const saveBtn = document.querySelector('.btn-primary');
+            const saveText = document.getElementById('save-text');
+            const spinner = document.getElementById('save-spinner');
+            
+            // Show loading state
+            saveBtn.disabled = true;
+            saveText.style.display = 'none';
+            spinner.style.display = 'block';
+            
+            const formData = new FormData();
+            const fullName = document.getElementById('full-name').value;
+            const photoFile = document.getElementById('photo-input').files[0];
+            
+            formData.append('name', fullName);
+            formData.append('email', document.getElementById('email').value);
+            if (photoFile) {
+                formData.append('profile_photo', photoFile);
+            }
+            
+            fetch('/api/profile/update', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update localStorage
+                    const user = JSON.parse(localStorage.getItem('user') || '{}');
+                    
+                    // Split full name into first_name and last_name
+                    const nameParts = fullName.trim().split(' ');
+                    user.first_name = nameParts[0] || '';
+                    user.last_name = nameParts.slice(1).join(' ') || '';
+                    
+                    if (data.profile_photo) {
+                        user.profile_photo = data.profile_photo;
+                    }
+                    localStorage.setItem('user', JSON.stringify(user));
+                    
+                    // Show success with SweetAlert2
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Profile updated successfully!',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        background: '#1f2937',
+                        customClass: {
+                            popup: 'swal2-popup',
+                            title: 'swal2-title',
+                            htmlContainer: 'swal2-html-container',
+                            confirmButton: 'swal2-confirm'
+                        }
+                    }).then(() => {
+                        window.location.href = '/block';
+                    });
+                } else {
+                    // Show error with SweetAlert2
+                    Swal.fire({
+                        title: 'Error!',
+                        text: data.message || 'Failed to update profile',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        background: '#1f2937',
+                        customClass: {
+                            popup: 'swal2-popup',
+                            title: 'swal2-title',
+                            htmlContainer: 'swal2-html-container',
+                            confirmButton: 'swal2-confirm'
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Show error with SweetAlert2
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred while updating profile',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    background: '#1f2937',
+                    customClass: {
+                        popup: 'swal2-popup',
+                        title: 'swal2-title',
+                        htmlContainer: 'swal2-html-container',
+                        confirmButton: 'swal2-confirm'
+                    }
+                });
+            })
+            .finally(() => {
+                // Hide loading state
+                saveBtn.disabled = false;
+                saveText.style.display = 'block';
+                spinner.style.display = 'none';
+            });
+        }
+        
+        function cancelEdit() {
+            Swal.fire({
+                title: 'Discard Changes?',
+                text: 'Are you sure you want to discard your changes?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Discard',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#374151',
+                background: '#1f2937',
+                customClass: {
+                    popup: 'swal2-popup',
+                    title: 'swal2-title',
+                    htmlContainer: 'swal2-html-container',
+                    confirmButton: 'swal2-confirm',
+                    cancelButton: 'swal2-cancel',
+                    icon: 'swal2-icon'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/block';
+                }
+            });
+        }
+        
+    </script>
+</body>
+</html>
